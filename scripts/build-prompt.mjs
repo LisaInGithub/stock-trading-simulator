@@ -1,4 +1,4 @@
-export function buildUserPrompt({ date, pf, marketData, news }) {
+export function buildUserPrompt({ date, pf, marketData, news, fundamentals }) {
   const equity = pf.equityHistory.length ? pf.equityHistory[pf.equityHistory.length - 1].equity : pf.initialCapital;
 
   const positionLines = Object.keys(pf.positions).length
@@ -14,7 +14,11 @@ export function buildUserPrompt({ date, pf, marketData, news }) {
     const headlines = news?.[d.ticker]?.length
       ? '\n  News: ' + news[d.ticker].map(h => `"${h.title}"${h.pubDate ? ` (${h.pubDate})` : ''}`).join('; ')
       : '\n  News: (none found)';
-    return `- ${d.ticker}: close $${d.close} (as of ${d.asOfDate}), 1d ${fmtPct(d.change1d)}, 5d ${fmtPct(d.change5d)}, 20d ${fmtPct(d.change20d)}, SMA20 ${d.sma20 ?? 'N/A'}, SMA50 ${d.sma50 ?? 'N/A'}, RSI14 ${d.rsi14 ?? 'N/A'}, MACD ${d.macd ?? 'N/A'}/signal ${d.macdSignal ?? 'N/A'}/hist ${d.macdHistogram ?? 'N/A'}, Bollinger(20,2) ${d.bbLower ?? 'N/A'}-${d.bbMid ?? 'N/A'}-${d.bbUpper ?? 'N/A'}, ATR14 ${d.atr14 ?? 'N/A'}, 20d range $${d.low20d}-$${d.high20d}, volume ${d.volume ?? 'N/A'} (avg20d ${d.avgVolume20d ?? 'N/A'})${headlines}`;
+    const f = fundamentals?.find(x => x.ticker === d.ticker);
+    const fundamentalsLine = f && !f.error
+      ? `\n  Fundamentals (SEC EDGAR, latest quarter ending ${f.fiscalPeriodEnd}): revenue $${fmtLarge(f.revenue)} (YoY ${fmtPct(f.revenueYoY)}), net income $${fmtLarge(f.netIncome)} (YoY ${fmtPct(f.netIncomeYoY)}), diluted EPS $${f.epsDiluted ?? 'N/A'}`
+      : `\n  Fundamentals: unavailable (${f?.error || 'not found'})`;
+    return `- ${d.ticker}: close $${d.close} (as of ${d.asOfDate}), 1d ${fmtPct(d.change1d)}, 5d ${fmtPct(d.change5d)}, 20d ${fmtPct(d.change20d)}, SMA20 ${d.sma20 ?? 'N/A'}, SMA50 ${d.sma50 ?? 'N/A'}, RSI14 ${d.rsi14 ?? 'N/A'}, MACD ${d.macd ?? 'N/A'}/signal ${d.macdSignal ?? 'N/A'}/hist ${d.macdHistogram ?? 'N/A'}, Bollinger(20,2) ${d.bbLower ?? 'N/A'}-${d.bbMid ?? 'N/A'}-${d.bbUpper ?? 'N/A'}, ATR14 ${d.atr14 ?? 'N/A'}, 20d range $${d.low20d}-$${d.high20d}, volume ${d.volume ?? 'N/A'} (avg20d ${d.avgVolume20d ?? 'N/A'})${headlines}${fundamentalsLine}`;
   }).join('\n');
 
   return `CURRENT DECISION DATE: ${date}
@@ -26,7 +30,7 @@ CURRENT PORTFOLIO STATE:
 - Open Positions:
 ${positionLines}
 
-MARKET DATA (most recent completed daily session only, plus recent news headlines — no intraday/real-time prices, no financial statements or earnings data available beyond this):
+MARKET DATA (most recent completed daily session, recent news headlines, and latest quarterly SEC EDGAR fundamentals — no intraday/real-time prices, no analyst ratings, no forward guidance beyond this):
 ${marketLines}
 
 You may only trade tickers from the market data list above, or choose HOLD. Use only the information given above and in the system prompt — the news headlines are unverified third-party summaries, not confirmed facts, so weigh them accordingly. Now produce today's single trading decision in the exact Output Format specified in the system prompt, with no extra commentary before or after it.`;
@@ -35,4 +39,12 @@ You may only trade tickers from the market data list above, or choose HOLD. Use 
 function fmtPct(n) {
   if (n === null || n === undefined) return 'N/A';
   return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+}
+
+function fmtLarge(n) {
+  if (n === null || n === undefined) return 'N/A';
+  const abs = Math.abs(n);
+  if (abs >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+  if (abs >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+  return n.toFixed(0);
 }

@@ -9,8 +9,9 @@ GitHub Actions（每日排程，目前已暫停，見下方「目前狀態」）
   └─ scripts/run-daily.mjs
        ├─ scripts/fetch-market-data.mjs   抓 Yahoo Finance 免費日線資料（收盤價/SMA/RSI/MACD/布林通道/ATR/20日高低）
        ├─ scripts/fetch-news.mjs          抓 Google News RSS 免費新聞標題（近3天，每檔最多4則）
+       ├─ scripts/fetch-fundamentals.mjs  抓 SEC EDGAR 官方財報數據（營收/淨利/EPS，含年增率）
        ├─ scripts/portfolio.js            重播 decisions.json，算出目前現金/持倉/權益（前端也共用這份邏輯）
-       ├─ scripts/build-prompt.mjs        組合「系統提示 + 目前投組 + 市場資料 + 新聞」給 Claude
+       ├─ scripts/build-prompt.mjs        組合「系統提示 + 目前投組 + 市場資料 + 新聞 + 基本面」給 Claude
        ├─ scripts/call-claude.mjs         呼叫 Anthropic API
        └─ scripts/parse-decision.mjs      解析 Claude 輸出的固定格式，驗證後寫回 data/decisions.json
   └─ git commit + push（自動提交 data/decisions.json 與 data/logs/*.json）

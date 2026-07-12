@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getMarketData } from './fetch-market-data.mjs';
+import { getNewsForTickers } from './fetch-news.mjs';
 import { buildUserPrompt } from './build-prompt.mjs';
 import { callClaude } from './call-claude.mjs';
 import { parseDecision } from './parse-decision.mjs';
@@ -127,8 +128,10 @@ async function main() {
     return;
   }
 
+  const news = await getNewsForTickers(watchlist.filter(t => marketData.find(d => d.ticker === t && !d.error)));
+
   const systemPrompt = await readFile(SYSTEM_PROMPT_PATH, 'utf-8');
-  const userPrompt = buildUserPrompt({ date, pf, marketData });
+  const userPrompt = buildUserPrompt({ date, pf, marketData, news });
 
   console.log('--- USER PROMPT ---\n' + userPrompt);
 
@@ -162,7 +165,7 @@ async function main() {
   await mkdir(LOGS_DIR, { recursive: true });
   await writeFile(
     path.join(LOGS_DIR, `${date}.json`),
-    JSON.stringify({ date, marketData, userPrompt, rawResponse, parsed, normalized }, null, 2) + '\n'
+    JSON.stringify({ date, marketData, news, userPrompt, rawResponse, parsed, normalized }, null, 2) + '\n'
   );
 
   console.log(`Logged decision: ${decision.action} ${decision.ticker || ''}`.trim());

@@ -34,6 +34,75 @@ function pctChange(values, lookback) {
   return (now - then) / then;
 }
 
+function ema(values, period) {
+  if (values.length < period) return null;
+  const k = 2 / (period + 1);
+  let prev = values.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  for (let i = period; i < values.length; i++) {
+    prev = values[i] * k + prev * (1 - k);
+  }
+  return prev;
+}
+
+function emaSeries(values, period) {
+  // Returns an array of EMA values aligned to `values` (first `period-1` entries are null).
+  if (values.length < period) return values.map(() => null);
+  const k = 2 / (period + 1);
+  const out = new Array(values.length).fill(null);
+  let prev = values.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  out[period - 1] = prev;
+  for (let i = period; i < values.length; i++) {
+    prev = values[i] * k + prev * (1 - k);
+    out[i] = prev;
+  }
+  return out;
+}
+
+function macd(closes, fast = 12, slow = 26, signalPeriod = 9) {
+  if (closes.length < slow + signalPeriod) return { macd: null, signal: null, histogram: null };
+  const emaFast = emaSeries(closes, fast);
+  const emaSlow = emaSeries(closes, slow);
+  const macdLine = closes.map((_, i) => (emaFast[i] != null && emaSlow[i] != null) ? emaFast[i] - emaSlow[i] : null);
+  const macdValues = macdLine.filter(v => v != null);
+  const signal = ema(macdValues, signalPeriod);
+  const macdNow = macdLine[macdLine.length - 1];
+  if (signal == null || macdNow == null) return { macd: roundOrNull(macdNow), signal: null, histogram: null };
+  return { macd: round(macdNow), signal: round(signal), histogram: round(macdNow - signal) };
+}
+
+function bollingerBands(closes, period = 20, numStdDev = 2) {
+  if (closes.length < period) return { upper: null, lower: null, mid: null };
+  const slice = closes.slice(-period);
+  const mean = slice.reduce((a, b) => a + b, 0) / period;
+  const variance = slice.reduce((a, b) => a + (b - mean) ** 2, 0) / period;
+  const stdDev = Math.sqrt(variance);
+  return {
+    upper: round(mean + numStdDev * stdDev),
+    mid: round(mean),
+    lower: round(mean - numStdDev * stdDev)
+  };
+}
+
+function atr(highs, lows, closes, period = 14) {
+  if (closes.length < period + 1) return null;
+  const trueRanges = [];
+  for (let i = 1; i < closes.length; i++) {
+    const tr = Math.max(
+      highs[i] - lows[i],
+      Math.abs(highs[i] - closes[i - 1]),
+      Math.abs(lows[i] - closes[i - 1])
+    );
+    trueRanges.push(tr);
+  }
+  // Wilder's smoothing: seed with a simple average of the first `period`
+  // true ranges, then smooth forward through the rest of the series.
+  let value = trueRanges.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  for (let i = period; i < trueRanges.length; i++) {
+    value = (value * (period - 1) + trueRanges[i]) / period;
+  }
+  return round(value);
+}
+
 async function fetchOne(ticker) {
   const url = `${YAHOO_CHART_URL}${encodeURIComponent(ticker)}?range=6mo&interval=1d`;
   const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
@@ -61,6 +130,8 @@ async function fetchOne(ticker) {
   const last = closes.length - 1;
   const closePrice = closes[last];
   const avgVol20 = sma(volumes.filter(v => v != null), 20);
+  const macdResult = macd(closes);
+  const bb = bollingerBands(closes);
 
   return {
     ticker,
@@ -72,6 +143,13 @@ async function fetchOne(ticker) {
     sma20: roundOrNull(sma(closes, 20)),
     sma50: roundOrNull(sma(closes, 50)),
     rsi14: roundOrNull(rsi(closes, 14)),
+    macd: macdResult.macd,
+    macdSignal: macdResult.signal,
+    macdHistogram: macdResult.histogram,
+    bbUpper: bb.upper,
+    bbMid: bb.mid,
+    bbLower: bb.lower,
+    atr14: atr(highs, lows, closes, 14),
     high20d: round(Math.max(...highs.slice(-20))),
     low20d: round(Math.min(...lows.slice(-20))),
     volume: volumes[last],

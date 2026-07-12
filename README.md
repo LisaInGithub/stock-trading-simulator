@@ -5,11 +5,12 @@
 ## 架構
 
 ```
-GitHub Actions（每日排程）
+GitHub Actions（每日排程，目前已暫停，見下方「目前狀態」）
   └─ scripts/run-daily.mjs
-       ├─ scripts/fetch-market-data.mjs   抓 Yahoo Finance 免費日線資料（收盤價/SMA/RSI/20日高低）
+       ├─ scripts/fetch-market-data.mjs   抓 Yahoo Finance 免費日線資料（收盤價/SMA/RSI/MACD/布林通道/ATR/20日高低）
+       ├─ scripts/fetch-news.mjs          抓 Google News RSS 免費新聞標題（近3天，每檔最多4則）
        ├─ scripts/portfolio.js            重播 decisions.json，算出目前現金/持倉/權益（前端也共用這份邏輯）
-       ├─ scripts/build-prompt.mjs        組合「系統提示 + 目前投組 + 市場資料」給 Claude
+       ├─ scripts/build-prompt.mjs        組合「系統提示 + 目前投組 + 市場資料 + 新聞」給 Claude
        ├─ scripts/call-claude.mjs         呼叫 Anthropic API
        └─ scripts/parse-decision.mjs      解析 Claude 輸出的固定格式，驗證後寫回 data/decisions.json
   └─ git commit + push（自動提交 data/decisions.json 與 data/logs/*.json）
@@ -18,7 +19,11 @@ index.html + app.js（GitHub Pages 靜態網頁）
   └─ fetch('data/decisions.json') 讀取正式紀錄 → 用 scripts/portfolio.js 重新計算並顯示
 ```
 
-**安全機制**：Claude 回覆的價格不會被直接信任 —— 一律用 `fetch-market-data.mjs` 實際抓到的收盤價覆蓋；若 ACTION 與目前持倉方向衝突（例如已持有 SHORT 卻輸出 BUY）、代號不在觀察名單、或股數超過可平倉數量，會自動降級為 HOLD 並記錄原因於 reasoning 欄位。
+**安全機制**：Claude 回覆的價格不會被直接信任 —— 一律用 `fetch-market-data.mjs` 實際抓到的收盤價覆蓋；若 ACTION 與目前持倉方向衝突（例如已持有 SHORT 卻輸出 BUY）、代號不在觀察名單、或股數超過可平倉數量，會自動降級為 HOLD 並記錄原因於 reasoning 欄位。新聞標題明確標示為「未經查證的第三方摘要」，提示模型不要照單全收。
+
+## 目前狀態：手動模式
+
+目前還沒有設定 `ANTHROPIC_API_KEY`（未開通 Anthropic 帳單），`.github/workflows/daily-trade.yml` 的每日排程已註解關閉，只保留手動觸發（`workflow_dispatch`）。每日決策改由 Claude Code 在對話中直接分析、手動寫入 `data/decisions.json`（格式與自動化管線完全相同）。之後設定好 API Key，只要取消排程那幾行的註解即可切回全自動。
 
 ## 設定步驟
 

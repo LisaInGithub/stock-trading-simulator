@@ -1,0 +1,12 @@
+{
+  "name": "stock-trading-simulator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Virtual US stock paper-trading dashboard driven by an AI trading agent (Claude) via a daily GitHub Actions job.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "trade": "node scripts/run-daily.mjs"
+  }
+}

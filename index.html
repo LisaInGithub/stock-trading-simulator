@@ -93,8 +93,8 @@
 
   <section class="panel">
     <div class="panel-head">
-      <h2>新增今日交易決策</h2>
-      <span class="hint">欄位對應系統提示中的固定輸出格式</span>
+      <h2>本機測試：手動新增決策</h2>
+      <span class="hint">正式交易由 AI 每日自動產生並寫入 data/decisions.json；這裡輸入的資料只存在你目前這個瀏覽器，不會同步</span>
     </div>
 
     <form id="decisionForm" class="decision-form">
@@ -156,8 +156,8 @@
 
   <section class="panel">
     <div class="panel-head">
-      <h2>標記市價（不交易，僅更新未實現損益）</h2>
-      <span class="hint">用於沒有交易的日子，仍想記錄當日持倉市值</span>
+      <h2>本機測試：標記市價（不交易，僅更新未實現損益）</h2>
+      <span class="hint">用於沒有交易的日子，仍想記錄當日持倉市值；同樣只存在本機瀏覽器</span>
     </div>
     <form id="markForm" class="mark-form">
       <label>日期
@@ -176,7 +176,7 @@
   <section class="panel">
     <div class="panel-head">
       <h2>決策歷史紀錄</h2>
-      <span class="hint">歷史一經記錄即為永久紀錄，如需修正可刪除後重新輸入</span>
+      <span class="hint">AI 每日自動產生的正式紀錄，加上任何本機測試決策（標示「本機」）</span>
     </div>
     <div class="table-wrap">
       <table id="logTable">
@@ -193,10 +193,11 @@
   </section>
 
   <footer class="foot">
-    <p>資料僅儲存在本機瀏覽器 localStorage，未連接任何真實交易帳戶或即時報價。定期使用「匯出備份」保存 JSON 檔。</p>
+    <p>正式交易決策由 AI 每日自動產生（GitHub Actions + Claude API），寫入 data/decisions.json，未連接任何真實券商帳戶或真實資金。下方手動表單僅供本機測試，資料存在瀏覽器 localStorage。</p>
   </footer>
 
 </div>
+<script src="scripts/portfolio.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

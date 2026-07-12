@@ -1,191 +1,44 @@
 /* ---------- constants ---------- */
 const STORAGE_KEY = 'stw_state_v1';
-const COMMISSION_RATE = 0.0005; // 0.05%
-const SLIPPAGE_RATE = 0.0005;   // 0.05%
-const DEFAULT_INITIAL_CAPITAL = 1000;
+const REMOTE_DATA_URL = 'data/decisions.json';
+const { COMMISSION_RATE, DEFAULT_INITIAL_CAPITAL, MAX_LEVERAGE, computePortfolio: computePortfolioPure, computeMetrics } = window.Portfolio;
 
 /* ---------- state ---------- */
-function loadState() {
+// state.decisions is the AI-generated canonical log fetched from data/decisions.json
+// (committed by the GitHub Actions daily-trade workflow). localState.decisions is an
+// optional local-only sandbox layer (manual form below) that only exists in this browser.
+function loadLocalState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
   } catch (e) { /* corrupted, fall through */ }
-  return { initialCapital: DEFAULT_INITIAL_CAPITAL, decisions: [] };
+  return { decisions: [] };
 }
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+function saveLocalState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
 }
 
-let state = loadState();
+let remoteState = { initialCapital: DEFAULT_INITIAL_CAPITAL, decisions: [] };
+let localState = loadLocalState();
+let sandboxMode = false; // becomes true once the user adds a manual local entry
+
+function activeState() {
+  if (!sandboxMode) return remoteState;
+  return {
+    initialCapital: remoteState.initialCapital,
+    decisions: [...remoteState.decisions, ...localState.decisions]
+  };
+}
+
+function computePortfolio() {
+  return computePortfolioPure(activeState());
+}
 
 /* ---------- helpers ---------- */
 const fmtMoney = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtPct = n => (n >= 0 ? '+' : '') + (n * 100).toFixed(2) + '%';
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-
-function diffDays(d1, d2) {
-  const a = new Date(d1 + 'T00:00:00');
-  const b = new Date(d2 + 'T00:00:00');
-  return Math.max(0, Math.round((b - a) / 86400000));
-}
-
-/* ---------- core replay engine ---------- */
-function computePortfolio() {
-  const initialCapital = state.initialCapital || DEFAULT_INITIAL_CAPITAL;
-  const decisions = [...state.decisions].sort((a, b) => {
-    if (a.date !== b.date) return a.date < b.date ? -1 : 1;
-    return a.seq - b.seq;
-  });
-
-  let cash = initialCapital;
-  const positions = {};   // ticker -> {side, shares, avgPrice, leverage, marginUsed, openDate}
-  const markPrices = {};  // ticker -> last known price
-  const equityHistory = []; // {date, equity, cash}
-  const trades = [];         // realized closes
-
-  function currentEquity() {
-    let eq = cash;
-    for (const t in positions) {
-      const p = positions[t];
-      const mp = markPrices[t] ?? p.avgPrice;
-      const unreal = p.side === 'long' ? (mp - p.avgPrice) * p.shares : (p.avgPrice - mp) * p.shares;
-      eq += p.marginUsed + unreal;
-    }
-    return eq;
-  }
-
-  for (const d of decisions) {
-    const ticker = (d.ticker || '').toUpperCase().trim();
-    const leverage = Math.min(10, Math.max(1, Number(d.leverage) || 1));
-
-    if (d.action === 'MARK') {
-      if (ticker) markPrices[ticker] = Number(d.entryPrice) || markPrices[ticker];
-    } else if (d.action === 'HOLD') {
-      if (ticker && d.entryPrice) markPrices[ticker] = Number(d.entryPrice);
-    } else if (d.action === 'BUY') {
-      const entry = Number(d.entryPrice) || 0;
-      const size = Number(d.positionSize) || 0;
-      const effPrice = entry * (1 + SLIPPAGE_RATE);
-      const notional = size * effPrice;
-      const commission = notional * COMMISSION_RATE;
-      const margin = notional / leverage;
-      cash -= (margin + commission);
-      const pos = positions[ticker] || { side: 'long', shares: 0, avgPrice: 0, leverage, marginUsed: 0, openDate: d.date };
-      const totalShares = pos.shares + size;
-      pos.avgPrice = totalShares > 0 ? (pos.avgPrice * pos.shares + effPrice * size) / totalShares : effPrice;
-      pos.shares = totalShares;
-      pos.leverage = leverage;
-      pos.marginUsed += margin;
-      positions[ticker] = pos;
-      markPrices[ticker] = entry;
-    } else if (d.action === 'SHORT') {
-      const entry = Number(d.entryPrice) || 0;
-      const size = Number(d.positionSize) || 0;
-      const effPrice = entry * (1 - SLIPPAGE_RATE);
-      const notional = size * effPrice;
-      const commission = notional * COMMISSION_RATE;
-      const margin = notional / leverage;
-      cash -= (margin + commission);
-      const pos = positions[ticker] || { side: 'short', shares: 0, avgPrice: 0, leverage, marginUsed: 0, openDate: d.date };
-      const totalShares = pos.shares + size;
-      pos.avgPrice = totalShares > 0 ? (pos.avgPrice * pos.shares + effPrice * size) / totalShares : effPrice;
-      pos.shares = totalShares;
-      pos.leverage = leverage;
-      pos.marginUsed += margin;
-      positions[ticker] = pos;
-      markPrices[ticker] = entry;
-    } else if (d.action === 'SELL') {
-      const pos = positions[ticker];
-      if (pos && pos.side === 'long' && pos.shares > 0) {
-        const entry = Number(d.entryPrice) || 0;
-        const closeShares = Math.min(Number(d.positionSize) || 0, pos.shares);
-        const effPrice = entry * (1 - SLIPPAGE_RATE);
-        const proceeds = closeShares * effPrice;
-        const commission = proceeds * COMMISSION_RATE;
-        const marginReleased = (pos.avgPrice * closeShares) / pos.leverage;
-        const pnl = (effPrice - pos.avgPrice) * closeShares;
-        cash += marginReleased + pnl - commission;
-        trades.push({ ticker, side: 'long', openDate: pos.openDate, closeDate: d.date, shares: closeShares, pnl, holdingDays: diffDays(pos.openDate, d.date) });
-        pos.shares -= closeShares;
-        pos.marginUsed -= marginReleased;
-        if (pos.shares <= 1e-6) delete positions[ticker]; else positions[ticker] = pos;
-        markPrices[ticker] = entry;
-      }
-    } else if (d.action === 'COVER') {
-      const pos = positions[ticker];
-      if (pos && pos.side === 'short' && pos.shares > 0) {
-        const entry = Number(d.entryPrice) || 0;
-        const closeShares = Math.min(Number(d.positionSize) || 0, pos.shares);
-        const effPrice = entry * (1 + SLIPPAGE_RATE);
-        const cost = closeShares * effPrice;
-        const commission = cost * COMMISSION_RATE;
-        const marginReleased = (pos.avgPrice * closeShares) / pos.leverage;
-        const pnl = (pos.avgPrice - effPrice) * closeShares;
-        cash += marginReleased + pnl - commission;
-        trades.push({ ticker, side: 'short', openDate: pos.openDate, closeDate: d.date, shares: closeShares, pnl, holdingDays: diffDays(pos.openDate, d.date) });
-        pos.shares -= closeShares;
-        pos.marginUsed -= marginReleased;
-        if (pos.shares <= 1e-6) delete positions[ticker]; else positions[ticker] = pos;
-        markPrices[ticker] = entry;
-      }
-    }
-
-    equityHistory.push({ date: d.date, equity: currentEquity(), cash });
-  }
-
-  return { initialCapital, cash, positions, markPrices, equityHistory, trades };
-}
-
-/* ---------- metrics ---------- */
-function computeMetrics(pf) {
-  const equity = pf.equityHistory.length ? pf.equityHistory[pf.equityHistory.length - 1].equity : pf.initialCapital;
-  const totalReturn = (equity - pf.initialCapital) / pf.initialCapital;
-
-  let peak = pf.initialCapital, mdd = 0;
-  for (const pt of pf.equityHistory) {
-    peak = Math.max(peak, pt.equity);
-    mdd = Math.max(mdd, (peak - pt.equity) / peak);
-  }
-
-  let sharpe = null;
-  if (pf.equityHistory.length > 2) {
-    const rets = [];
-    for (let i = 1; i < pf.equityHistory.length; i++) {
-      const prev = pf.equityHistory[i - 1].equity;
-      if (prev > 0) rets.push(pf.equityHistory[i].equity / prev - 1);
-    }
-    if (rets.length > 1) {
-      const mean = rets.reduce((a, b) => a + b, 0) / rets.length;
-      const variance = rets.reduce((a, b) => a + (b - mean) ** 2, 0) / (rets.length - 1);
-      const std = Math.sqrt(variance);
-      sharpe = std > 0 ? (mean / std) * Math.sqrt(252) : null;
-    }
-  }
-
-  const wins = pf.trades.filter(t => t.pnl > 0);
-  const losses = pf.trades.filter(t => t.pnl <= 0);
-  const winRate = pf.trades.length ? (wins.length / pf.trades.length) * 100 : null;
-  const avgWin = wins.length ? wins.reduce((a, b) => a + b.pnl, 0) / wins.length : null;
-  const avgLoss = losses.length ? losses.reduce((a, b) => a + b.pnl, 0) / losses.length : null;
-  const grossWin = wins.reduce((a, b) => a + b.pnl, 0);
-  const grossLoss = Math.abs(losses.reduce((a, b) => a + b.pnl, 0));
-  const profitFactor = grossLoss > 0 ? grossWin / grossLoss : (grossWin > 0 ? Infinity : null);
-  const avgHold = pf.trades.length ? pf.trades.reduce((a, b) => a + b.holdingDays, 0) / pf.trades.length : null;
-
-  let monthlyReturn = null;
-  if (pf.equityHistory.length > 1) {
-    const firstDate = pf.equityHistory[0].date;
-    const lastDate = pf.equityHistory[pf.equityHistory.length - 1].date;
-    const days = Math.max(1, diffDays(firstDate, lastDate));
-    monthlyReturn = Math.pow(1 + totalReturn, 30 / days) - 1;
-  }
-
-  return {
-    equity, totalReturn, mdd, sharpe, winRate, avgWin, avgLoss, profitFactor,
-    numberOfTrades: pf.trades.length, avgHold, monthlyReturn
-  };
-}
 
 /* ---------- rendering ---------- */
 function render() {
@@ -205,8 +58,24 @@ function render() {
   renderChart(pf);
   renderPositions(pf);
   renderMetrics(m);
-  renderLog(pf);
+  renderLog();
   renderMarkTickerOptions(pf);
+  renderSandboxBanner();
+}
+
+function renderSandboxBanner() {
+  let el = document.getElementById('sandboxBanner');
+  if (!sandboxMode) {
+    if (el) el.remove();
+    return;
+  }
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'sandboxBanner';
+    el.className = 'sandbox-banner';
+    document.querySelector('.app').insertBefore(el, document.querySelector('.summary-grid'));
+  }
+  el.textContent = '⚠ 目前顯示包含本機測試決策（不會出現在其他裝置或正式部署上）。可在下方「本機測試」區塊清除。';
 }
 
 function renderChart(pf) {
@@ -235,7 +104,6 @@ function renderChart(pf) {
   const x = i => points.length > 1 ? pad + (i / (points.length - 1)) * (cssWidth - pad * 2) : cssWidth / 2;
   const y = v => cssHeight - pad - ((v - min) / spanY) * (cssHeight - pad * 2);
 
-  // baseline (initial capital)
   ctx.strokeStyle = 'rgba(147,161,199,0.35)';
   ctx.setLineDash([4, 4]);
   ctx.beginPath();
@@ -244,7 +112,6 @@ function renderChart(pf) {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // equity line
   ctx.strokeStyle = '#4f7cff';
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -254,7 +121,6 @@ function renderChart(pf) {
   });
   ctx.stroke();
 
-  // fill
   const grad = ctx.createLinearGradient(0, 0, 0, cssHeight);
   grad.addColorStop(0, 'rgba(79,124,255,0.25)');
   grad.addColorStop(1, 'rgba(79,124,255,0)');
@@ -264,14 +130,12 @@ function renderChart(pf) {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // last point dot
   const lastI = points.length - 1;
   ctx.fillStyle = '#4f7cff';
   ctx.beginPath();
   ctx.arc(x(lastI), y(points[lastI].equity), 3.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // labels
   ctx.fillStyle = '#93a1c7';
   ctx.font = '11px -apple-system, sans-serif';
   ctx.fillText(fmtMoney(max), 4, 12);
@@ -330,16 +194,18 @@ function renderMetrics(m) {
   ].join('');
 }
 
-function renderLog(pf) {
+function renderLog() {
   const tbody = document.querySelector('#logTable tbody');
   tbody.innerHTML = '';
-  const sorted = [...state.decisions].sort((a, b) => (a.date !== b.date ? (a.date < b.date ? 1 : -1) : b.seq - a.seq));
+  const all = activeState().decisions;
+  const sorted = [...all].sort((a, b) => (a.date !== b.date ? (a.date < b.date ? 1 : -1) : (b.seq || 0) - (a.seq || 0)));
   document.getElementById('logEmpty').style.display = sorted.length ? 'none' : 'block';
 
   for (const d of sorted) {
+    const isLocal = !!d._local;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${d.date}</td>
+      <td>${d.date}${isLocal ? ' <span class="pill" style="background:rgba(147,161,199,0.15);color:var(--text-dim)">本機</span>' : ''}</td>
       <td><span class="pill ${d.action}">${d.action}</span></td>
       <td>${d.ticker || '-'}</td>
       <td>${d.entryPrice ? fmtMoney(Number(d.entryPrice)) : '-'}</td>
@@ -348,16 +214,17 @@ function renderLog(pf) {
       <td>${d.confidence ?? '-'}</td>
       <td>${d.riskLevel ? `<span class="pill ${d.riskLevel}">${d.riskLevel}</span>` : '-'}</td>
       <td class="wrap">${d.reasoning ? escapeHtml(d.reasoning) : ''}</td>
-      <td><button class="icon-btn" data-id="${d.id}" title="刪除">✕</button></td>
+      <td>${isLocal ? `<button class="icon-btn" data-id="${d.id}" title="刪除">✕</button>` : ''}</td>
     `;
     tbody.appendChild(tr);
   }
 
   tbody.querySelectorAll('.icon-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!confirm('確定要刪除這筆決策紀錄嗎？此動作會重新計算整個投資組合。')) return;
-      state.decisions = state.decisions.filter(d => d.id !== btn.dataset.id);
-      saveState();
+      if (!confirm('確定要刪除這筆本機測試決策嗎？')) return;
+      localState.decisions = localState.decisions.filter(d => d.id !== btn.dataset.id);
+      saveLocalState();
+      sandboxMode = localState.decisions.length > 0;
       render();
     });
   });
@@ -377,7 +244,7 @@ function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-/* ---------- form: decision ---------- */
+/* ---------- form: decision (local sandbox only) ---------- */
 const decisionForm = document.getElementById('decisionForm');
 const calcPreview = document.getElementById('calcPreview');
 const formError = document.getElementById('formError');
@@ -393,7 +260,7 @@ function updateCalcPreview() {
   const ticker = (fd.get('ticker') || '').toUpperCase().trim();
   const entryPrice = Number(fd.get('entryPrice')) || 0;
   const positionSize = Number(fd.get('positionSize')) || 0;
-  const leverage = Math.min(10, Math.max(1, Number(fd.get('leverage')) || 1));
+  const leverage = Math.min(MAX_LEVERAGE, Math.max(1, Number(fd.get('leverage')) || 1));
   const stopLoss = Number(fd.get('stopLoss')) || 0;
   const takeProfit = Number(fd.get('takeProfit')) || 0;
 
@@ -488,22 +355,24 @@ decisionForm.addEventListener('submit', e => {
 
   const decision = {
     id: uid(),
-    seq: state.decisions.length,
+    seq: 100000 + localState.decisions.length, // keep local entries ordered after remote ones on same date
     date: fd.get('date'),
     action,
     ticker,
     entryPrice: fd.get('entryPrice') || '',
     positionSize: fd.get('positionSize') || '',
-    leverage: Math.min(10, Math.max(1, Number(fd.get('leverage')) || 1)),
+    leverage: Math.min(MAX_LEVERAGE, Math.max(1, Number(fd.get('leverage')) || 1)),
     stopLoss: fd.get('stopLoss') || '',
     takeProfit: fd.get('takeProfit') || '',
     confidence: fd.get('confidence') || '',
     riskLevel: fd.get('riskLevel') || '',
-    reasoning: fd.get('reasoning') || ''
+    reasoning: fd.get('reasoning') || '',
+    _local: true
   };
 
-  state.decisions.push(decision);
-  saveState();
+  localState.decisions.push(decision);
+  saveLocalState();
+  sandboxMode = true;
   decisionForm.reset();
   decisionForm.querySelector('[name="date"]').value = todayStr();
   decisionForm.querySelector('[name="leverage"]').value = 1;
@@ -513,24 +382,26 @@ decisionForm.addEventListener('submit', e => {
   render();
 });
 
-/* ---------- form: mark price ---------- */
+/* ---------- form: mark price (local sandbox only) ---------- */
 const markForm = document.getElementById('markForm');
 markForm.addEventListener('submit', e => {
   e.preventDefault();
   const fd = new FormData(markForm);
   const ticker = fd.get('ticker');
   if (!ticker) return;
-  state.decisions.push({
+  localState.decisions.push({
     id: uid(),
-    seq: state.decisions.length,
+    seq: 100000 + localState.decisions.length,
     date: fd.get('date'),
     action: 'MARK',
     ticker,
     entryPrice: fd.get('price'),
     positionSize: '', leverage: '', stopLoss: '', takeProfit: '',
-    confidence: '', riskLevel: '', reasoning: '(市價標記)'
+    confidence: '', riskLevel: '', reasoning: '(市價標記)',
+    _local: true
   });
-  saveState();
+  saveLocalState();
+  sandboxMode = true;
   markForm.reset();
   markForm.querySelector('[name="date"]').value = todayStr();
   render();
@@ -538,7 +409,7 @@ markForm.addEventListener('submit', e => {
 
 /* ---------- export / import / reset ---------- */
 document.getElementById('btnExport').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(activeState(), null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -559,10 +430,11 @@ document.getElementById('fileImport').addEventListener('change', e => {
     try {
       const parsed = JSON.parse(reader.result);
       if (!Array.isArray(parsed.decisions)) throw new Error('invalid');
-      state = { initialCapital: Number(parsed.initialCapital) || DEFAULT_INITIAL_CAPITAL, decisions: parsed.decisions };
-      saveState();
+      localState = { decisions: parsed.decisions.map(d => ({ ...d, _local: true })) };
+      saveLocalState();
+      sandboxMode = localState.decisions.length > 0;
       render();
-      alert('匯入成功。');
+      alert('已匯入為本機測試資料。');
     } catch (err) {
       alert('檔案格式錯誤，無法匯入。');
     }
@@ -572,9 +444,10 @@ document.getElementById('fileImport').addEventListener('change', e => {
 });
 
 document.getElementById('btnReset').addEventListener('click', () => {
-  if (!confirm('這會清空所有交易紀錄並重設為初始資金 $1000，確定嗎？建議先匯出備份。')) return;
-  state = { initialCapital: DEFAULT_INITIAL_CAPITAL, decisions: [] };
-  saveState();
+  if (!confirm('這會清除本機測試決策（不影響 AI 正式交易紀錄），確定嗎？')) return;
+  localState = { decisions: [] };
+  saveLocalState();
+  sandboxMode = false;
   render();
 });
 
@@ -587,4 +460,13 @@ window.addEventListener('resize', () => render());
 
 decisionForm.querySelector('[name="date"]').value = todayStr();
 markForm.querySelector('[name="date"]').value = todayStr();
-render();
+
+fetch(REMOTE_DATA_URL, { cache: 'no-store' })
+  .then(r => (r.ok ? r.json() : null))
+  .then(data => {
+    if (data && Array.isArray(data.decisions)) {
+      remoteState = { initialCapital: Number(data.initialCapital) || DEFAULT_INITIAL_CAPITAL, decisions: data.decisions };
+    }
+  })
+  .catch(() => { /* offline / file:// — fall back to defaults */ })
+  .finally(render);

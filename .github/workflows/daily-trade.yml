@@ -1,9 +1,11 @@
 name: Daily AI Trade Decision
 
 on:
-  schedule:
-    # 21:30 UTC, Mon-Fri — after the US market close (4pm ET) year-round
-    - cron: '30 21 * * 1-5'
+  # Scheduled run disabled until ANTHROPIC_API_KEY is set (no billing set up yet).
+  # Re-enable by uncommenting the schedule block below.
+  # schedule:
+  #   # 21:30 UTC, Mon-Fri — after the US market close (4pm ET) year-round
+  #   - cron: '30 21 * * 1-5'
   workflow_dispatch: {}
 
 permissions:

@@ -33,7 +33,14 @@ ${positionLines}
 MARKET DATA (most recent completed daily session, recent news headlines, and latest quarterly SEC EDGAR fundamentals — no intraday/real-time prices, no analyst ratings, no forward guidance beyond this):
 ${marketLines}
 
-You may only trade tickers from the market data list above, or choose HOLD. Use only the information given above and in the system prompt — the news headlines are unverified third-party summaries, not confirmed facts, so weigh them accordingly. Now produce today's single trading decision in the exact Output Format specified in the system prompt, with no extra commentary before or after it.`;
+You may only trade tickers from the market data list above, or choose HOLD. Use only the information given above and in the system prompt — the news headlines are unverified third-party summaries, not confirmed facts, so weigh them accordingly.
+
+DECISION PROCESS (internal reasoning, inspired by the TradingAgents multi-agent debate framework — do this thinking silently, then output only the final fixed-format decision):
+1. Identify the 1-3 most interesting candidates (or conclude none qualify).
+2. For each candidate, argue the BULL case (why this could work) and the BEAR case (why it could fail) using the technical/fundamental/news data above — steelman both sides honestly rather than picking a side first and rationalizing it.
+3. Reconcile the debate into a single view: does the bull or bear case win, and by how much conviction?
+4. Risk-manager check: verify the resulting trade (if any) respects the 2% max risk per trade and does not violate the daily risk limit — if it fails this check, downgrade to HOLD regardless of how compelling the bull case was.
+5. Only then write the final decision in the exact Output Format specified in the system prompt, with no extra commentary before or after it. The REASONING section's four bullets should reflect the strongest points from this internal debate, not a fresh restatement.`;
 }
 
 function fmtPct(n) {

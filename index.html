@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="虛擬交易平台">
+<meta name="theme-color" content="#0F172A">
+<title>虛擬美股交易平台 · Paper Trading Desk</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">📈</span>
+      <div>
+        <h1>虛擬美股交易平台</h1>
+        <p class="sub">Paper Trading Desk · 紀律化交易紀錄與績效追蹤</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button id="btnExport" class="btn ghost">匯出備份</button>
+      <button id="btnImport" class="btn ghost">匯入備份</button>
+      <input type="file" id="fileImport" accept="application/json" hidden>
+      <button id="btnReset" class="btn danger">重設帳戶</button>
+    </div>
+  </header>
+
+  <section class="summary-grid">
+    <div class="card stat">
+      <span class="label">目前權益 (Equity)</span>
+      <span class="value" id="statEquity">$0.00</span>
+      <span class="delta" id="statEquityDelta"></span>
+    </div>
+    <div class="card stat">
+      <span class="label">現金 (Cash)</span>
+      <span class="value" id="statCash">$0.00</span>
+      <span class="delta muted">未投入資金保留現金部位</span>
+    </div>
+    <div class="card stat">
+      <span class="label">總報酬率</span>
+      <span class="value" id="statTotalReturn">0.00%</span>
+      <span class="delta muted" id="statInitial"></span>
+    </div>
+    <div class="card stat">
+      <span class="label">最大回撤 (MDD)</span>
+      <span class="value" id="statMDD">0.00%</span>
+      <span class="delta muted">依權益曲線峰值計算</span>
+    </div>
+  </section>
+
+  <section class="main-grid">
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>權益曲線</h2>
+        <span class="hint">每筆決策 / 每次標記市價都會產生一個快照點</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="equityChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>目前持倉</h2>
+      </div>
+      <div class="table-wrap">
+        <table id="positionsTable">
+          <thead>
+            <tr>
+              <th>代號</th><th>方向</th><th>股數</th><th>均價</th><th>槓桿</th>
+              <th>市價</th><th>未實現損益</th><th>佔用保證金</th><th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="empty-hint" id="positionsEmpty">目前無持倉，現金 100% 為 Cash 部位。</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>績效指標</h2>
+    </div>
+    <div class="metrics-grid" id="metricsGrid"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>新增今日交易決策</h2>
+      <span class="hint">欄位對應系統提示中的固定輸出格式</span>
+    </div>
+
+    <form id="decisionForm" class="decision-form">
+      <div class="grid-2">
+        <label>日期
+          <input type="date" name="date" required>
+        </label>
+        <label>動作 ACTION
+          <select name="action" required>
+            <option value="BUY">BUY</option>
+            <option value="SELL">SELL</option>
+            <option value="SHORT">SHORT</option>
+            <option value="COVER">COVER</option>
+            <option value="HOLD">HOLD</option>
+          </select>
+        </label>
+        <label>股票代號 TICKER
+          <input type="text" name="ticker" placeholder="例如 AAPL" style="text-transform:uppercase">
+        </label>
+        <label>進場價 ENTRY PRICE
+          <input type="number" name="entryPrice" step="0.0001" min="0">
+        </label>
+        <label>部位大小 POSITION SIZE（股數）
+          <input type="number" name="positionSize" step="0.0001" min="0">
+        </label>
+        <label>槓桿 LEVERAGE
+          <input type="number" name="leverage" step="0.1" min="1" max="10" value="1">
+        </label>
+        <label>停損 STOP LOSS
+          <input type="number" name="stopLoss" step="0.0001" min="0">
+        </label>
+        <label>停利 TAKE PROFIT
+          <input type="number" name="takeProfit" step="0.0001" min="0">
+        </label>
+        <label>信心分數 CONFIDENCE (0-100)
+          <input type="number" name="confidence" min="0" max="100">
+        </label>
+        <label>風險等級 RISK LEVEL
+          <select name="riskLevel">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="full">理由 REASONING（技術面 / 基本面 / 市場背景 / 風險評估）
+        <textarea name="reasoning" rows="3" placeholder="Technical / Fundamental / Market Context / Risk Assessment"></textarea>
+      </label>
+
+      <div class="calc-preview" id="calcPreview"></div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary">送出並記錄決策</button>
+        <span class="form-error" id="formError"></span>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>標記市價（不交易，僅更新未實現損益）</h2>
+      <span class="hint">用於沒有交易的日子，仍想記錄當日持倉市值</span>
+    </div>
+    <form id="markForm" class="mark-form">
+      <label>日期
+        <input type="date" name="date" required>
+      </label>
+      <label>代號
+        <select name="ticker" id="markTickerSelect"></select>
+      </label>
+      <label>市價
+        <input type="number" name="price" step="0.0001" min="0" required>
+      </label>
+      <button type="submit" class="btn secondary">更新標記</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>決策歷史紀錄</h2>
+      <span class="hint">歷史一經記錄即為永久紀錄，如需修正可刪除後重新輸入</span>
+    </div>
+    <div class="table-wrap">
+      <table id="logTable">
+        <thead>
+          <tr>
+            <th>日期</th><th>動作</th><th>代號</th><th>價格</th><th>股數</th>
+            <th>槓桿</th><th>信心</th><th>風險</th><th>備註</th><th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="empty-hint" id="logEmpty">尚無任何決策紀錄。</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p>資料僅儲存在本機瀏覽器 localStorage，未連接任何真實交易帳戶或即時報價。定期使用「匯出備份」保存 JSON 檔。</p>
+  </footer>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>

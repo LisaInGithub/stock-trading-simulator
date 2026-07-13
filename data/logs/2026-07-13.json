@@ -1,0 +1,599 @@
+{
+  "date": "2026-07-13",
+  "marketData": [
+    {
+      "ticker": "AAPL",
+      "asOfDate": "2026-07-10",
+      "close": 315.32,
+      "change1d": -0.28,
+      "change5d": 2.17,
+      "change20d": 8.14,
+      "sma20": 298.1,
+      "sma50": 297.77,
+      "rsi14": 61.87,
+      "macd": 4.62,
+      "macdSignal": 1.9,
+      "macdHistogram": 2.72,
+      "bbUpper": 320.61,
+      "bbMid": 298.1,
+      "bbLower": 275.59,
+      "atr14": 8.09,
+      "high20d": 316.91,
+      "low20d": 273.75,
+      "volume": 34109200,
+      "avgVolume20d": 64553610
+    },
+    {
+      "ticker": "MSFT",
+      "asOfDate": "2026-07-10",
+      "close": 385.1,
+      "change1d": 0.19,
+      "change5d": -1.38,
+      "change20d": -3.09,
+      "sma20": 380.51,
+      "sma50": 403.62,
+      "rsi14": 52.87,
+      "macd": -5.55,
+      "macdSignal": -8.04,
+      "macdHistogram": 2.49,
+      "bbUpper": 402.8,
+      "bbMid": 380.51,
+      "bbLower": 358.22,
+      "atr14": 11.97,
+      "high20d": 401.75,
+      "low20d": 349.2,
+      "volume": 24612200,
+      "avgVolume20d": 48088515
+    },
+    {
+      "ticker": "NVDA",
+      "asOfDate": "2026-07-10",
+      "close": 210.96,
+      "change1d": 4.03,
+      "change5d": 8.28,
+      "change20d": 5.26,
+      "sma20": 201.95,
+      "sma50": 209.2,
+      "rsi14": 50.27,
+      "macd": -1.74,
+      "macdSignal": -2.98,
+      "macdHistogram": 1.24,
+      "bbUpper": 213.8,
+      "bbMid": 201.95,
+      "bbLower": 190.1,
+      "atr14": 7.17,
+      "high20d": 213.99,
+      "low20d": 189.8,
+      "volume": 148124000,
+      "avgVolume20d": 146818825
+    },
+    {
+      "ticker": "AMZN",
+      "asOfDate": "2026-07-10",
+      "close": 245.34,
+      "change1d": -0.69,
+      "change5d": 1.1,
+      "change20d": 3.08,
+      "sma20": 240.19,
+      "sma50": 254.03,
+      "rsi14": 50.94,
+      "macd": -1.53,
+      "macdSignal": -3.28,
+      "macdHistogram": 1.75,
+      "bbUpper": 251.15,
+      "bbMid": 240.19,
+      "bbLower": 229.24,
+      "atr14": 7.72,
+      "high20d": 251.03,
+      "low20d": 225.55,
+      "volume": 31624900,
+      "avgVolume20d": 62047655
+    },
+    {
+      "ticker": "GOOGL",
+      "asOfDate": "2026-07-10",
+      "close": 357.18,
+      "change1d": -0.48,
+      "change5d": -0.76,
+      "change20d": 0.22,
+      "sma20": 357.88,
+      "sma50": 372.75,
+      "rsi14": 42.54,
+      "macd": -1.81,
+      "macdSignal": -2.96,
+      "macdHistogram": 1.14,
+      "bbUpper": 376.33,
+      "bbMid": 357.88,
+      "bbLower": 339.43,
+      "atr14": 10.71,
+      "high20d": 376,
+      "low20d": 330.2,
+      "volume": 18126000,
+      "avgVolume20d": 35547560
+    },
+    {
+      "ticker": "META",
+      "asOfDate": "2026-07-10",
+      "close": 669.21,
+      "change1d": 5.97,
+      "change5d": 14.81,
+      "change20d": 17.2,
+      "sma20": 584.61,
+      "sma50": 600.45,
+      "rsi14": 68.73,
+      "macd": 8.5,
+      "macdSignal": -2.69,
+      "macdHistogram": 11.18,
+      "bbUpper": 645.38,
+      "bbMid": 584.61,
+      "bbLower": 523.84,
+      "atr14": 26.28,
+      "high20d": 677.86,
+      "low20d": 540.18,
+      "volume": 40563100,
+      "avgVolume20d": 20295630
+    },
+    {
+      "ticker": "TSLA",
+      "asOfDate": "2026-07-10",
+      "close": 407.76,
+      "change1d": 0.3,
+      "change5d": 3.64,
+      "change20d": 6.86,
+      "sma20": 400.88,
+      "sma50": 409.2,
+      "rsi14": 51.99,
+      "macd": -0.14,
+      "macdSignal": -1.34,
+      "macdHistogram": 1.19,
+      "bbUpper": 429.03,
+      "bbMid": 400.88,
+      "bbLower": 372.72,
+      "atr14": 18.76,
+      "high20d": 432.86,
+      "low20d": 368.6,
+      "volume": 33342700,
+      "avgVolume20d": 46415260
+    },
+    {
+      "ticker": "AVGO",
+      "asOfDate": "2026-07-10",
+      "close": 399.97,
+      "change1d": -0.28,
+      "change5d": 10.96,
+      "change20d": 7.49,
+      "sma20": 382.76,
+      "sma50": 406.45,
+      "rsi14": 45.56,
+      "macd": -4.79,
+      "macdSignal": -8.29,
+      "macdHistogram": 3.5,
+      "bbUpper": 408.12,
+      "bbMid": 382.76,
+      "bbLower": 357.41,
+      "atr14": 17.51,
+      "high20d": 414.64,
+      "low20d": 356.43,
+      "volume": 14582400,
+      "avgVolume20d": 29285075
+    },
+    {
+      "ticker": "JPM",
+      "asOfDate": "2026-07-10",
+      "close": 336.47,
+      "change1d": 0.3,
+      "change5d": 0.6,
+      "change20d": 8.84,
+      "sma20": 330.57,
+      "sma50": 315.08,
+      "rsi14": 62.2,
+      "macd": 6.29,
+      "macdSignal": 6.62,
+      "macdHistogram": -0.33,
+      "bbUpper": 343.38,
+      "bbMid": 330.57,
+      "bbLower": 317.77,
+      "atr14": 6.88,
+      "high20d": 343.45,
+      "low20d": 308.88,
+      "volume": 6297800,
+      "avgVolume20d": 10859450
+    },
+    {
+      "ticker": "SPY",
+      "asOfDate": "2026-07-10",
+      "close": 754.95,
+      "change1d": 0.43,
+      "change5d": 1.37,
+      "change20d": 4.07,
+      "sma20": 743.81,
+      "sma50": 741.24,
+      "rsi14": 56.67,
+      "macd": 3.19,
+      "macdSignal": 2.25,
+      "macdHistogram": 0.95,
+      "bbUpper": 758.16,
+      "bbMid": 743.81,
+      "bbLower": 729.46,
+      "atr14": 9.23,
+      "high20d": 756.68,
+      "low20d": 716.58,
+      "volume": 42114300,
+      "avgVolume20d": 58665565
+    },
+    {
+      "ticker": "QQQ",
+      "asOfDate": "2026-07-10",
+      "close": 725.51,
+      "change1d": 0.31,
+      "change5d": 1.81,
+      "change20d": 4.59,
+      "sma20": 722.57,
+      "sma50": 715.16,
+      "rsi14": 44.56,
+      "macd": 1.72,
+      "macdSignal": 2.89,
+      "macdHistogram": -1.17,
+      "bbUpper": 743.68,
+      "bbMid": 722.57,
+      "bbLower": 701.45,
+      "atr14": 15.38,
+      "high20d": 745.45,
+      "low20d": 695,
+      "volume": 26374600,
+      "avgVolume20d": 45505680
+    },
+    {
+      "ticker": "XLE",
+      "asOfDate": "2026-07-10",
+      "close": 55.08,
+      "change1d": 0.47,
+      "change5d": 3.49,
+      "change20d": -5.44,
+      "sma20": 54.5,
+      "sma50": 56.75,
+      "rsi14": 58.86,
+      "macd": -0.65,
+      "macdSignal": -0.92,
+      "macdHistogram": 0.27,
+      "bbUpper": 56.99,
+      "bbMid": 54.5,
+      "bbLower": 52.01,
+      "atr14": 1.13,
+      "high20d": 58.99,
+      "low20d": 52.62,
+      "volume": 22969400,
+      "avgVolume20d": 33187845
+    }
+  ],
+  "news": {
+    "AAPL": [
+      {
+        "title": "Apple Inc. (AAPL) Is A Top Stock In D. E. Shaw’s Holdings",
+        "pubDate": "Sun, 12 Jul 2026 14:01:23 GMT"
+      },
+      {
+        "title": "AAPL Stock Quote Price and Forecast",
+        "pubDate": "Sat, 11 Jul 2026 23:55:13 GMT"
+      },
+      {
+        "title": "AAPL Stock Gains — Apple Reportedly Eyes Foldable iPhone, Camera-Equipped AirPods Launches In 2027",
+        "pubDate": "Sun, 12 Jul 2026 16:11:33 GMT"
+      },
+      {
+        "title": "Apple: AI Toll Booth Myth (NASDAQ:AAPL)",
+        "pubDate": "Mon, 13 Jul 2026 00:00:00 GMT"
+      }
+    ],
+    "MSFT": [
+      {
+        "title": "Should You Buy Microsoft Corporation (MSFT)’s Shares?",
+        "pubDate": "Sun, 12 Jul 2026 14:01:04 GMT"
+      },
+      {
+        "title": "Microsoft Stock (MSFT) Opinions on AI Monetization Concerns",
+        "pubDate": "Sun, 12 Jul 2026 14:03:00 GMT"
+      },
+      {
+        "title": "Microsoft Stock Forecast: Three Target Cuts Slice 10% Off — Yet Still Point to 33% Upside",
+        "pubDate": "Sun, 12 Jul 2026 19:05:55 GMT"
+      },
+      {
+        "title": "Microsoft Stock In For Some Relief? Board Member Scoops Up $2M In MSFT After Sharp Slide",
+        "pubDate": "Sun, 12 Jul 2026 08:25:48 GMT"
+      }
+    ],
+    "NVDA": [
+      {
+        "title": "Nvidia (NVDA) Stock Looks Fairly Priced As AI Hopes Face Tests",
+        "pubDate": "Sun, 12 Jul 2026 22:36:00 GMT"
+      },
+      {
+        "title": "Nvidia Stock Is Losing to the Market in 2026. Time to Walk Away or Double Down?",
+        "pubDate": "Mon, 13 Jul 2026 02:05:00 GMT"
+      },
+      {
+        "title": "Nvidia Stock Hasn’t Been This Cheap Since Before 2019. How to Play NVDA Stock Here.",
+        "pubDate": "Sun, 12 Jul 2026 18:33:17 GMT"
+      },
+      {
+        "title": "NVIDIA Stock (NVDA) Opinions on Recent Valuation Reset Amid AI Demand",
+        "pubDate": "Sun, 12 Jul 2026 17:33:00 GMT"
+      }
+    ],
+    "AMZN": [
+      {
+        "title": "Top Wall Street analysts are confident about these 3 stocks for the long haul",
+        "pubDate": "Sun, 12 Jul 2026 12:05:02 GMT"
+      },
+      {
+        "title": "Amazon (AMZN) Analyst Ratings, Stock Forecast and Price Target",
+        "pubDate": "Sun, 12 Jul 2026 16:39:54 GMT"
+      },
+      {
+        "title": "Price Prediction: Amazon Stock Will End The Year at This Price",
+        "pubDate": "Fri, 10 Jul 2026 17:30:18 GMT"
+      },
+      {
+        "title": "AMZN Stock Gains On Hitting Satellite Milestone to Launch Starlink Internet Rival This Year",
+        "pubDate": "Sun, 12 Jul 2026 09:39:04 GMT"
+      }
+    ],
+    "GOOGL": [
+      {
+        "title": "Alphabet Inc. (GOOGL) A Top AI Stock In D. E. Shaw’s Holdings",
+        "pubDate": "Sun, 12 Jul 2026 14:01:16 GMT"
+      },
+      {
+        "title": "GOOGL Stock: Google Loses More AI Talent As Two Experts Reportedly Move To Anthropic",
+        "pubDate": "Sat, 11 Jul 2026 16:52:20 GMT"
+      },
+      {
+        "title": "Alphabet (GOOGL) Faces UK Search Rules As Its Undervalued Narrative Gets Tested",
+        "pubDate": "Sun, 12 Jul 2026 23:36:16 GMT"
+      },
+      {
+        "title": "Alphabet (GOOGL) Stock Quotes, Company News And Chart Analysis",
+        "pubDate": "Fri, 10 Jul 2026 15:41:00 GMT"
+      }
+    ],
+    "META": [
+      {
+        "title": "Why Meta Platforms Stock Surged This Week",
+        "pubDate": "Mon, 13 Jul 2026 02:11:00 GMT"
+      },
+      {
+        "title": "Meta's stock has best week since early 2024 as optimism builds around AI strategy",
+        "pubDate": "Fri, 10 Jul 2026 15:44:18 GMT"
+      },
+      {
+        "title": "Meta Stock: A Cash-Gushing Ad Giant With a Powerful Moat but Limited Diversification",
+        "pubDate": "Mon, 13 Jul 2026 00:20:43 GMT"
+      },
+      {
+        "title": "Bank of America cuts to the chase on Meta stock amid reset",
+        "pubDate": "Sat, 11 Jul 2026 21:05:46 GMT"
+      }
+    ],
+    "TSLA": [
+      {
+        "title": "Should You Buy Tesla, Inc. (TSLA)’s Shares?",
+        "pubDate": "Sun, 12 Jul 2026 14:01:29 GMT"
+      },
+      {
+        "title": "How Investors Are Reacting To Tesla (TSLA) Record Q2 Deliveries And Heavy Robotaxi, Optimus Spending",
+        "pubDate": "Sun, 12 Jul 2026 22:34:00 GMT"
+      },
+      {
+        "title": "TSLA Stock Slips Overnight: Analyst Sees 2027, 2028 Revenue Below Consensus On Slower Optimus, Robotaxi Ramp",
+        "pubDate": "Sun, 12 Jul 2026 05:53:14 GMT"
+      },
+      {
+        "title": "Tesla, Inc. $TSLA Stock Holdings Increased by Citizens Financial Group Inc. RI",
+        "pubDate": "Sun, 12 Jul 2026 15:38:34 GMT"
+      }
+    ],
+    "AVGO": [
+      {
+        "title": "Should You Buy Broadcom Inc. (AVGO)’s Shares?",
+        "pubDate": "Sun, 12 Jul 2026 14:01:10 GMT"
+      },
+      {
+        "title": "3 Top Stocks to Double Up on Right Now -- Including Broadcom (AVGO) Stock",
+        "pubDate": "Fri, 10 Jul 2026 12:02:00 GMT"
+      },
+      {
+        "title": "Broadcom (AVGO) Stock Forum and Discussion",
+        "pubDate": "Sat, 11 Jul 2026 20:18:53 GMT"
+      },
+      {
+        "title": "AVGO Stock Headed For $319B Market Cap Wipeout, But Analysts Eye Buying Opportunity",
+        "pubDate": "Sat, 11 Jul 2026 16:48:09 GMT"
+      }
+    ],
+    "JPM": [
+      {
+        "title": "JPMorgan Chase Stock And 2 Large Cap US Banks In Focus For CPI Season",
+        "pubDate": "Mon, 13 Jul 2026 01:34:31 GMT"
+      },
+      {
+        "title": "JPM Stock Tests Record-High Resistance Near $343: Q2 Earnings, CPI Major Bank Catalysts",
+        "pubDate": "Mon, 13 Jul 2026 01:55:28 GMT"
+      },
+      {
+        "title": "WealthPLAN Partners LLC Sells 3,413 Shares of JPMorgan Chase & Co. $JPM",
+        "pubDate": "Sun, 12 Jul 2026 18:18:04 GMT"
+      },
+      {
+        "title": "JPMorgan Chase (JPM) Says Its AI Agents Beat 60 40 Portfolios In Backtests",
+        "pubDate": "Sun, 12 Jul 2026 06:10:00 GMT"
+      }
+    ],
+    "SPY": [
+      {
+        "title": "James Murdoch's SpaceX Investment Could Yield $7.5 Billion",
+        "pubDate": "Mon, 13 Jul 2026 01:35:03 GMT"
+      },
+      {
+        "title": "E-mini S&P 500 Futures Overview",
+        "pubDate": "Fri, 10 Jul 2026 07:00:00 GMT"
+      },
+      {
+        "title": "Dow Logs Worst Day Since March, S&P 500 And Nasdaq Snap Win Streak After US-Iran Exchange Fire — SNDK, TSLA, GOOGL, META, IREN In Focus",
+        "pubDate": "Sun, 12 Jul 2026 15:41:08 GMT"
+      },
+      {
+        "title": "SPY is up 0.2% today, on META stock price movement",
+        "pubDate": "Fri, 10 Jul 2026 16:16:00 GMT"
+      }
+    ],
+    "QQQ": [
+      {
+        "title": "If I Could Tell Every QQQ Investor 1 Thing About SpaceX's Nasdaq-100 Entry, It's This",
+        "pubDate": "Sun, 12 Jul 2026 19:49:00 GMT"
+      },
+      {
+        "title": "Merrithew & Thorsten Inc Invests $16.24 Million in Invesco QQQ $QQQ",
+        "pubDate": "Sun, 12 Jul 2026 17:44:34 GMT"
+      },
+      {
+        "title": "If I Could Tell Every QQQ Investor 1 Thing About SpaceX's Nasdaq-100 Entry, It's This",
+        "pubDate": "Sun, 12 Jul 2026 19:49:06 GMT"
+      },
+      {
+        "title": "Should You Buy QQQ While Tech Stocks Are Still Near Their All-Time Highs?",
+        "pubDate": "Sun, 12 Jul 2026 18:54:02 GMT"
+      }
+    ],
+    "XLE": [
+      {
+        "title": "INDO, USO, XLE, BATL In Focus As Iran Shock Hits Oil — Why Analysts Think Market May Look Past Doomsday Calls",
+        "pubDate": "Sun, 12 Jul 2026 02:06:51 GMT"
+      },
+      {
+        "title": "Eni CEO warns prolonged Middle East conflict could push oil prices higher (E:NYSE)",
+        "pubDate": "Sun, 12 Jul 2026 16:05:41 GMT"
+      },
+      {
+        "title": "Energy Select Sector SPDR (XLE) Pivot Points and Market Outlook",
+        "pubDate": "Fri, 10 Jul 2026 13:08:08 GMT"
+      },
+      {
+        "title": "XLE vs ICLN ETF Showdown Traditional Energy Meets Clean Energy. Which ETF Is the Better Buy?",
+        "pubDate": "Fri, 10 Jul 2026 21:37:00 GMT"
+      }
+    ]
+  },
+  "fundamentals": [
+    {
+      "ticker": "AAPL",
+      "fiscalPeriodEnd": "2026-03-28",
+      "revenue": 111184000000,
+      "revenueYoY": 16.6,
+      "netIncome": 29578000000,
+      "netIncomeYoY": 19.36,
+      "epsDiluted": 2.01
+    },
+    {
+      "ticker": "MSFT",
+      "fiscalPeriodEnd": "2026-03-31",
+      "revenue": 82886000000,
+      "revenueYoY": 18.3,
+      "netIncome": 31778000000,
+      "netIncomeYoY": 23.06,
+      "epsDiluted": 4.27
+    },
+    {
+      "ticker": "NVDA",
+      "fiscalPeriodEnd": "2026-04-26",
+      "revenue": 81615000000,
+      "revenueYoY": 85.23,
+      "netIncome": 58321000000,
+      "netIncomeYoY": 210.63,
+      "epsDiluted": 2.39
+    },
+    {
+      "ticker": "AMZN",
+      "fiscalPeriodEnd": "2026-03-31",
+      "revenue": 181519000000,
+      "revenueYoY": 16.61,
+      "netIncome": 30255000000,
+      "netIncomeYoY": 76.65,
+      "epsDiluted": 2.78
+    },
+    {
+      "ticker": "GOOGL",
+      "fiscalPeriodEnd": "2026-03-31",
+      "revenue": 109896000000,
+      "revenueYoY": 21.79,
+      "netIncome": 62578000000,
+      "netIncomeYoY": 81.18,
+      "epsDiluted": 5.11
+    },
+    {
+      "ticker": "META",
+      "fiscalPeriodEnd": "2026-03-31",
+      "revenue": 56311000000,
+      "revenueYoY": 33.08,
+      "netIncome": 26773000000,
+      "netIncomeYoY": 60.86,
+      "epsDiluted": 10.44
+    },
+    {
+      "ticker": "TSLA",
+      "fiscalPeriodEnd": "2026-03-31",
+      "revenue": 22387000000,
+      "revenueYoY": 15.78,
+      "netIncome": 477000000,
+      "netIncomeYoY": 16.63,
+      "epsDiluted": 0.13
+    },
+    {
+      "ticker": "AVGO",
+      "fiscalPeriodEnd": "2026-05-03",
+      "revenue": 22187000000,
+      "revenueYoY": 47.87,
+      "netIncome": 715000000,
+      "netIncomeYoY": -40.22,
+      "epsDiluted": 1.91
+    },
+    {
+      "ticker": "JPM",
+      "fiscalPeriodEnd": "2026-03-31",
+      "revenue": 24246000000,
+      "revenueYoY": 4.88,
+      "netIncome": 16494000000,
+      "netIncomeYoY": 12.64,
+      "epsDiluted": 5.94
+    },
+    {
+      "ticker": "SPY",
+      "error": "No recent quarterly XBRL facts found for this company"
+    },
+    {
+      "ticker": "QQQ",
+      "error": "No recent quarterly XBRL facts found for this company"
+    },
+    {
+      "ticker": "XLE",
+      "error": "No SEC CIK mapping (likely an ETF/fund, not an operating company)"
+    }
+  ],
+  "decision": {
+    "id": "manual-2026-07-13",
+    "seq": 1,
+    "date": "2026-07-13",
+    "action": "HOLD",
+    "ticker": "",
+    "entryPrice": "",
+    "positionSize": "",
+    "leverage": 1,
+    "stopLoss": "",
+    "takeProfit": "",
+    "confidence": 30,
+    "riskLevel": "Low",
+    "reasoning": "* Technical Analysis (Yahoo Finance): Price/technical data has not changed since the last decision — the most recently completed session is still Friday 2026-07-10 (it is currently early Monday, before this session's close). Among the names surveyed: META is extended well above its own 20-day Bollinger upper band (RSI 68.7, +17.2% over 20 days, +14.8% in just the last 5), JPM is testing 20-day-range resistance near $343 heading into known binary catalysts, and NVDA/AVGO/AAPL show constructive but not decisive setups (neutral-to-bullish RSI, mixed MACD crossovers).\n\n* Fundamental Analysis (SEC EDGAR, latest filed quarters): Fundamentals broadly remain strong and unchanged from the last check — NVDA (+85.2% revenue YoY, +210.6% net income YoY), GOOGL (+81.2% net income YoY), AMZN (+76.7% net income YoY) all show robust growth. None of this is new information driving today's call; strong fundamentals alone do not override the near-term technical/event risk below.\n\n* Market Context (Google News headlines, overnight): The dominant new information since Friday is geopolitical, not economic — headlines report \"Dow Logs Worst Day Since March... After US-Iran Exchange Fire\" hitting the S&P 500 and Nasdaq and snapping their win streak, plus oil-market warnings of a prolonged Middle East conflict pushing energy prices higher. Separately, JPM heads into Q2 earnings and a CPI print this week (binary, gap-risk events a stop-loss cannot protect against), and META's rally is being framed by some coverage as already fully priced (\"cash-gushing ad giant... limited diversification\").\n\n* Risk Assessment — Bull case: NVDA's valuation reset (\"hasn't been this cheap since before 2019\" per coverage) plus a forming bullish MACD crossover could argue for an early-stage long. META's AI-driven momentum could continue near-term. Bear case: a fresh geopolitical shock just increased broad-market tail risk overnight; META and JPM are both extended into resistance/highs with binary catalysts imminent (JPM: earnings + CPI this week; META: a rally several sell-side desks are now calling fully priced); NVDA's setup is still unconfirmed (MACD line remains below zero) rather than a clean breakout. Risk-manager check: given the fresh macro shock and the fact that every live candidate is either extended, event-risk-heavy, or unconfirmed, no candidate clears the bar for a favorable, well-timed entry today — the bear case wins on balance. Confidence for any new trade is below the 50 threshold, so per the decision philosophy (protect capital first, cash is a valid position), the correct call is to hold 100% cash again and reassess once Monday's session actually closes and the CPI/earnings catalysts have passed.",
+    "_dataAsOf": "2026-07-10"
+  },
+  "mode": "manual (Claude Code, bull/bear debate process)"
+}

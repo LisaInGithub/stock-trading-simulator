@@ -7,7 +7,7 @@ import { getNewsForTickers } from './fetch-news.mjs';
 import { getFundamentals } from './fetch-fundamentals.mjs';
 import { buildUserPrompt } from './build-prompt.mjs';
 import { callClaude } from './call-claude.mjs';
-import { parseDecision } from './parse-decision.mjs';
+import { parseDecisions } from './parse-decision.mjs';
 
 const require = createRequire(import.meta.url);
 const Portfolio = require('./portfolio.js');
@@ -71,6 +71,22 @@ function validateAndNormalize(parsed, pf, marketData, watchlist) {
   if (action === 'SHORT' && existing && existing.side === 'long') {
     notes.push(`${ticker} currently LONG — cannot SHORT without SELL first. Downgraded to HOLD.`);
     return { action: 'HOLD', ticker: '', entryPrice: null, positionSize: null, leverage: 1, stopLoss: null, takeProfit: null, notes };
+  }
+  if (action === 'BUY' || action === 'SHORT') {
+    // Never trust the model's own cash bookkeeping — re-derive the cost of
+    // opening/adding to this position against the actually replayed cash
+    // balance, since a multi-ticker day can compound margin usage across
+    // several sequential trades against the same starting cash pool.
+    const slip = action === 'BUY' ? (1 + Portfolio.SLIPPAGE_RATE) : (1 - Portfolio.SLIPPAGE_RATE);
+    const effPrice = entryPrice * slip;
+    const notional = positionSize * effPrice;
+    const commission = notional * Portfolio.COMMISSION_RATE;
+    const margin = notional / leverage;
+    const cost = margin + commission;
+    if (cost > pf.cash + 1e-6) {
+      notes.push(`${action} ${ticker} requires $${cost.toFixed(2)} but only $${pf.cash.toFixed(2)} cash is available — downgraded to HOLD.`);
+      return { action: 'HOLD', ticker: '', entryPrice: null, positionSize: null, leverage: 1, stopLoss: null, takeProfit: null, notes };
+    }
   }
   if (action === 'SELL') {
     if (!existing || existing.side !== 'long') {
@@ -141,37 +157,71 @@ async function main() {
   const rawResponse = await callClaude({ systemPrompt, userPrompt, apiKey });
   console.log('--- CLAUDE RESPONSE ---\n' + rawResponse);
 
-  const parsed = parseDecision(rawResponse);
-  const normalized = validateAndNormalize(parsed, pf, marketData, watchlist);
+  // A single reply may contain multiple ⸻-separated decision blocks (one
+  // per ticker) on a multi-stock day. Validate them in order against the
+  // portfolio state as it would exist after each prior decision in the
+  // same batch, so e.g. a second BUY correctly sees the cash already
+  // committed by the first.
+  const allParsed = parseDecisions(rawResponse);
+  let holdOnly = allParsed.length === 1 && allParsed[0].action === 'HOLD';
+  const entries = [];
+  let runningState = { initialCapital: state.initialCapital || Portfolio.DEFAULT_INITIAL_CAPITAL, decisions: [...state.decisions] };
 
-  const decision = {
-    id: `auto-${date}`,
-    seq: state.decisions.length,
-    date,
-    action: normalized.action,
-    ticker: normalized.ticker,
-    entryPrice: normalized.entryPrice ?? '',
-    positionSize: normalized.positionSize ?? '',
-    leverage: normalized.leverage ?? 1,
-    stopLoss: normalized.stopLoss ?? '',
-    takeProfit: normalized.takeProfit ?? '',
-    confidence: parsed.confidence ?? '',
-    riskLevel: parsed.riskLevel || '',
-    reasoning: [parsed.reasoning, ...normalized.notes].filter(Boolean).join('\n\n[System note] '),
-    _dataAsOf: latestDataDate
-  };
+  for (const parsed of allParsed) {
+    const runningPf = Portfolio.computePortfolio(runningState);
+    const normalized = validateAndNormalize(parsed, runningPf, marketData, watchlist);
+    if (normalized.action === 'HOLD' && !normalized.ticker && normalized.notes.length === 0 && !holdOnly) {
+      // A model-issued HOLD block alongside real trades in the same batch
+      // carries no ledger effect — skip it rather than logging a no-op row.
+      continue;
+    }
 
-  state.decisions.push(decision);
+    const decision = {
+      id: `auto-${date}-${entries.length}`,
+      seq: runningState.decisions.length,
+      date,
+      action: normalized.action,
+      ticker: normalized.ticker,
+      entryPrice: normalized.entryPrice ?? '',
+      positionSize: normalized.positionSize ?? '',
+      leverage: normalized.leverage ?? 1,
+      stopLoss: normalized.stopLoss ?? '',
+      takeProfit: normalized.takeProfit ?? '',
+      confidence: parsed.confidence ?? '',
+      riskLevel: parsed.riskLevel || '',
+      reasoning: [parsed.reasoning, ...normalized.notes].filter(Boolean).join('\n\n[System note] '),
+      _dataAsOf: latestDataDate
+    };
+    entries.push(decision);
+    runningState.decisions.push(decision);
+  }
+
+  if (entries.length === 0) {
+    // Every block collapsed to a no-op HOLD — still record one HOLD row
+    // so the log has continuity for this trading day.
+    entries.push({
+      id: `auto-${date}-0`,
+      seq: runningState.decisions.length,
+      date,
+      action: 'HOLD',
+      ticker: '', entryPrice: '', positionSize: '', leverage: 1, stopLoss: '', takeProfit: '',
+      confidence: '', riskLevel: '',
+      reasoning: allParsed[0]?.reasoning || '',
+      _dataAsOf: latestDataDate
+    });
+  }
+
+  state.decisions.push(...entries);
   state.initialCapital = state.initialCapital || Portfolio.DEFAULT_INITIAL_CAPITAL;
   await writeFile(DECISIONS_PATH, JSON.stringify(state, null, 2) + '\n');
 
   await mkdir(LOGS_DIR, { recursive: true });
   await writeFile(
     path.join(LOGS_DIR, `${date}.json`),
-    JSON.stringify({ date, marketData, news, fundamentals, userPrompt, rawResponse, parsed, normalized }, null, 2) + '\n'
+    JSON.stringify({ date, marketData, news, fundamentals, userPrompt, rawResponse, parsed: allParsed, entries }, null, 2) + '\n'
   );
 
-  console.log(`Logged decision: ${decision.action} ${decision.ticker || ''}`.trim());
+  console.log(`Logged ${entries.length} decision(s): ` + entries.map(d => `${d.action} ${d.ticker || ''}`.trim()).join(', '));
 }
 
 main().catch(err => {

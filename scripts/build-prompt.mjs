@@ -35,12 +35,12 @@ ${marketLines}
 
 You may only trade tickers from the market data list above, or choose HOLD. Use only the information given above and in the system prompt — the news headlines are unverified third-party summaries, not confirmed facts, so weigh them accordingly.
 
-DECISION PROCESS (internal reasoning, inspired by the TradingAgents multi-agent debate framework — do this thinking silently, then output only the final fixed-format decision):
-1. Identify the 1-3 most interesting candidates (or conclude none qualify).
+DECISION PROCESS (internal reasoning, inspired by the TradingAgents multi-agent debate framework — do this thinking silently, then output only the final fixed-format decision(s)):
+1. Identify the 1-3 most interesting candidates across the whole watchlist (or conclude none qualify). You are not limited to a single ticker today — if multiple independent candidates each clear the bar on their own merits, you may act on more than one.
 2. For each candidate, argue the BULL case (why this could work) and the BEAR case (why it could fail) using the technical/fundamental/news data above — steelman both sides honestly rather than picking a side first and rationalizing it.
-3. Reconcile the debate into a single view: does the bull or bear case win, and by how much conviction?
-4. Risk-manager check: verify the resulting trade (if any) respects the 2% max risk per trade and does not violate the daily risk limit — if it fails this check, downgrade to HOLD regardless of how compelling the bull case was.
-5. Only then write the final decision in the exact Output Format specified in the system prompt, with no extra commentary before or after it. The REASONING section's four bullets should reflect the strongest points from this internal debate, not a fresh restatement.`;
+3. Reconcile each candidate's debate into a single view: does the bull or bear case win, and by how much conviction?
+4. Risk-manager check, run across ALL candidates you intend to act on together: verify each resulting trade respects the 2% max risk per trade, and that the combined risk/margin usage across every trade today does not violate the daily risk limit or exceed available buying power — if any single trade fails this check, downgrade that one to HOLD regardless of how compelling its bull case was, independent of the others.
+5. Only then write the final decision(s) in the exact Output Format specified in the system prompt (one block per ticker acted on, separated by a ⸻ line if there is more than one), with no extra commentary before, between, or after them. Each REASONING section's four bullets should reflect the strongest points from that ticker's internal debate, not a fresh restatement.`;
 }
 
 function fmtPct(n) {

@@ -49,6 +49,21 @@ function toNumber(s) {
   return m ? Number(m[0]) : null;
 }
 
+// Splits a raw model reply into one or more decision blocks. The model
+// separates multiple same-day decisions (multi-ticker days) with a line
+// containing only "⸻" (see prompt/system-prompt.txt Output Format). A
+// single-decision reply has no separator and is returned as one block.
+function splitBlocks(rawText) {
+  const blocks = rawText
+    .split(/^[ \t]*⸻[ \t]*$/m)
+    .map(b => b.trim())
+    .filter(Boolean);
+  // Guard against a stray leading/trailing divider producing an empty
+  // block, and against blocks that don't actually contain a decision
+  // (e.g. leftover preamble text) by requiring an ACTION label.
+  return blocks.filter(b => buildLabelRegex('ACTION').test(b));
+}
+
 export function parseDecision(rawText) {
   const sections = extractSections(rawText);
 
@@ -80,4 +95,12 @@ export function parseDecision(rawText) {
     reasoning: (sections['REASONING'] || '').trim(),
     rawResponse: rawText
   };
+}
+
+// Parses a raw model reply that may contain one or more ⸻-separated
+// decision blocks (multi-ticker days) into an array of decision objects.
+export function parseDecisions(rawText) {
+  const blocks = splitBlocks(rawText);
+  if (blocks.length === 0) return [parseDecision(rawText)];
+  return blocks.map(parseDecision);
 }

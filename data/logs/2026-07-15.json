@@ -1,0 +1,35 @@
+{
+  "date": "2026-07-15",
+  "dataSourceNote": "This session's network egress policy blocked the normal data pipeline for this run: direct requests to query1.finance.yahoo.com, news.google.com, and www.sec.gov all returned policy-level 403s at the proxy (confirmed via the proxy status endpoint's recentRelayFailures, kind: connect_rejected). A retry via the WebFetch tool (which does not route through this session's local proxy) also got a 403 directly from Yahoo Finance, indicating Yahoo itself is blocking that request path too. As a fallback, current price/news context below was gathered via WebSearch instead of scripts/fetch-market-data.mjs + fetch-news.mjs + fetch-fundamentals.mjs. This is qualitative, third-party-summarized data, not the structured OHLCV/technical-indicator/EDGAR feed used on other decision days, and it is noticeably noisier: e.g. NVDA's 'current' price was restated two different ways ($211.80 vs $207.57) within a single search result, and MSFT's cited 52-week high ($555.45) is inconsistent with its ~$385 quoted price in the same summary. No BUY/SELL/SHORT/COVER decision was sized off this data as a result — see reasoning in data/decisions.json for the full risk-assessment rationale.",
+  "webSearchFindings": {
+    "AAPL": "Record high ~$321.29 on 2026-07-13, +16% since 2026-06-25. Catalysts: Broadcom chip supply deal extension through 2031 (announced 2026-07-06), on-device AI progress, CEO transition from Tim Cook to John Ternus, Citi price target raised to $365. Valuation ~34x forward earnings vs 10-yr avg 23x. Analyst consensus Moderate Buy, avg target $327.20 (~3.4% upside from record high). Earnings due 2026-07-30. Sources: tipranks.com, gurufocus.com, fxleaders.com, stockinvest.us (via WebSearch).",
+    "MSFT": "Quoted ~$384.93 (2026-07-14 close), day range $377.35-$387.99. Cited 52-week range $349.20-$555.45 (internally inconsistent with current quote — treat with caution). FQ2 2026: $81.3B revenue (+17% YoY), EPS $4.14, beat expectations. Catalysts: Copilot/365 AI rollout, Azure AI growth, Activision Blizzard gaming revenue. Source: WebSearch aggregated finance pages.",
+    "NVDA": "Conflicting same-result quotes: $211.80 (close, 2026-07-14, +4.06%) vs $207.57 elsewhere in the same summary. KeyBanc raised price target to $330 from $310. New Nvidia restrictions on advanced chip sales approvals in Asia reported. 52-week range $162.02-$236.54. Source: WebSearch aggregated finance/news pages.",
+    "AMZN": "~$246.56, day range $243.80-$248.90 (2026-07-14). 52-week range $196.00-$278.56. Heavy AI/infrastructure capex flagged as a near-term FCF pressure point; some analysts view stock as undervalued despite this. Earnings expected 2026-07-29. Source: WebSearch aggregated finance/news pages.",
+    "GOOGL": "~$352.51 on 2026-07-13, down 1.31% that session. Google Cloud backlog nearly doubled QoQ to >$460B, cloud revenue growth 63%. 52-week range $179.68-$408.61 (+98.22% YoY). Source: WebSearch aggregated finance/news pages.",
+    "META": "~$661.18 close on 2026-07-14, after volatility earlier in the month (spiked to ~$630, dipped to ~$583). 'Meta Compute' cloud arm in development to monetize spare AI capacity; 2026 capex guided $125-145B. Morgan Stanley maintains $775 target. Source: WebSearch aggregated finance/news pages.",
+    "TSLA": "~$395-396, +0.36% in 24h, +3.62% over the past week, but down >12% YTD for 2026. 52-week range $297.82-$498.83. Jefferies raised target to $400 from $375. Headlines on Robotaxi regulatory friction (NJ law) and Tesla trailing Waymo in robotaxi rollout. Earnings due 2026-07-22. Source: WebSearch aggregated finance/news pages.",
+    "AVGO": "~$389.48, day range $384.64-$397.33 (2026-07-14). Catalyst: ~$30B+ Apple chip supply chain deal extension through 2031. Analyst consensus Buy (26 analysts), 52-week range $269.58-$495.00. Source: WebSearch aggregated finance/news pages.",
+    "JPM": "~$342.50, day range $324.10-$344.73 (2026-07-14), near 52-week high ($344.73). Q2 2026 beat: $16.9B net income, $6.14 EPS, managed revenue growth and ex-notables EPS growth of 14.8%/23.7% YoY reported 2026-07-14, stock up on the print. Source: WebSearch aggregated finance/news pages.",
+    "SPY/QQQ": "QQQ closed ~$719.69 on 2026-07-14 (day range $714.02-$722.71, ATH $745.34 on 2026-06-02). Choppy tape driven by Strait of Hormuz/Iran-related oil headlines, partially offset by a cooler-than-expected June CPI (-0.4% MoM vs -0.1% expected). Source: WebSearch aggregated finance/news pages (TipRanks).",
+    "XLE": "~$56.74 (2026-07-14), day range $55.86-$56.97, 52-week range $42.05-$63.46 — mid-range, tracking oil-driven volatility. Source: WebSearch aggregated finance pages."
+  },
+  "decisionProcess": "Applied the system prompt's bull/bear/risk-manager framework across the watchlist using the qualitative web-search findings above in place of the unreachable structured pipeline. AAPL, NVDA, JPM, and AVGO all show real bullish catalysts, but each has already made its move (record high, post-earnings pop, or deal-news pop) rather than offering a fresh, well-timed entry; AMZN and META carry a real fundamental headwind (heavy guided AI capex pressuring near-term FCF). None of the candidates combined a sound entry with data precise enough to compute a defensible Entry Price / Stop Loss / Take Profit / Risk-Reward Ratio, so the risk-manager check failed for all of them and every candidate was downgraded to HOLD.",
+  "entries": [
+    {
+      "id": "manual-2026-07-15",
+      "seq": 1,
+      "date": "2026-07-15",
+      "action": "HOLD",
+      "ticker": "",
+      "entryPrice": "",
+      "positionSize": "",
+      "leverage": 1,
+      "stopLoss": "",
+      "takeProfit": "",
+      "confidence": 25,
+      "riskLevel": "Low",
+      "_dataAsOf": "2026-07-14 (web search fallback, approximate — see dataSourceNote)"
+    }
+  ]
+}

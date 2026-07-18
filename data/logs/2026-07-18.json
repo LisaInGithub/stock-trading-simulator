@@ -1,0 +1,46 @@
+{
+  "date": "2026-07-18",
+  "dataSourceNote": "The structured data pipeline (Yahoo Finance, Google News, SEC EDGAR) was unreachable again this session (policy-level 403s at the proxy). Web search was used for qualitative price/news context instead. No new BUY/SELL/SHORT/COVER was sized off this data; the existing AAPL position was evaluated only against its own already-approved stop ($308) / take-profit ($338) plan, which has not been triggered. The reasoning field in data/decisions.json was written directly in Traditional Chinese per user request, to make the dashboard's decision explanations easier to read; this log keeps the underlying research notes in English for consistency with prior days' logs.",
+  "webSearchFindings": {
+    "AAPL": "Closed $333.74 on 2026-07-17 (+0.14%, momentum clearly slowing). Apple overtook NVIDIA as the world's most valuable company. HSBC upgraded to Buy from Hold; KeyBanc downgraded to Underweight with a $250 target (2026-07-14) vs Citi/Evercore ISI both reiterating $365 targets — a wide analyst split. RSI14 at 71.86 (overbought), 9.7% above its 20-day SMA ($303.63) and 21.6% above its 200-day SMA ($273.82). FQ3 earnings due 2026-07-30 (consensus EPS $1.89, revenue $108.86B). Now within ~1.5% of the position's original $338 take-profit. Source: benzinga.com, WebSearch aggregated finance pages.",
+    "MSFT": "Climbed 1.8% to $402.70 on 2026-07-17, extending Wednesday's +2.8% (two-session +4.6%, adding ~$132B market cap) even as the Nasdaq fell ~1% in a chip-led selloff — a notable divergence. Citi cut its target to $570 (from $620, kept Buy); Morgan Stanley calls MSFT's generative-AI lead 'clear'. AI revenue run-rate exceeds $37B, growing 123%; Copilot paid seats over 20M. FY4Q26 earnings 2026-07-29. Source: foreignpolicyjournal.com (via WebSearch).",
+    "NVDA": "Fell to ~$200-207 on 2026-07-17 (prior close $207.40, day range $197.97-$206.65), part of the broader chip-sector selloff. Still Strong Buy consensus (58 buy / 1 sell), continued AI-demand tailwinds (TSMC capex, new AI model unveiled, Japan expansion). Source: WebSearch aggregated finance/news pages.",
+    "AMZN": "Closed $254.92 on 2026-07-17 (+3.00%, day range $249.75-$256.48). Q2 2026 revenue +17%, operating income +30%; Prime Day boosted June online sales (~2% M/M). KeyBanc raised target to $335 (from $330, Overweight). A senior AWS cloud executive departure reported 2026-07-15. Q2 earnings call scheduled 2026-07-30. Source: WebSearch aggregated finance/news pages.",
+    "GOOGL": "Closed $354.46 on 2026-07-17 (roughly flat after 07-16's -4.44% drop), day range $352.30-$375.27. Continued weight from the Gemini 3.5 Pro launch delay. Q2 earnings due 2026-07-22 (4 days out) — binary event risk. Source: WebSearch aggregated finance/news pages.",
+    "META": "Closed $646.01 on 2026-07-17, having tumbled as much as -5.3% intraday that Friday amid a broader AI-related tech selloff. Wedbush and BMO both flagged weak visibility on AI-investment ROI (BMO: 'least visible return on investment story among peers'); Zuckerberg reportedly noted internally that AI agent development hasn't accelerated as expected; 2026 capex guidance ($125-145B) continues to weigh; added pressure from Fed-hawkishness concerns and renewed antitrust/privacy scrutiny. Source: fxleaders.com, tradingkey.com (via WebSearch).",
+    "TSLA": "Fell -2.61% to $380.84 on 2026-07-17 (day range $384.36-$385.44 cited in one source; lowest close since May 2026, down >12% over the trailing 4 weeks). NHTSA rejected Tesla's request for an exemption from a headlight-related recall repair. Q2 earnings due 2026-07-22. Source: WebSearch aggregated finance/news pages.",
+    "AVGO": "~$374.50 on 2026-07-17 (day range $371.90-$388.65), continuing its pullback amid the broader semiconductor rout. Facing a patent-infringement regulatory matter involving Samsung/Netlist; a further ~$10M insider stock sale disclosed. Apple chip-supply deal (through 2031) and Standard Chartered infrastructure partnership remain positive long-term context. Source: WebSearch aggregated finance/news pages.",
+    "JPM": "Up 7% since its 2026-07-14 earnings release; Q2 EPS $7.70 vs $5.55 est. (+38.7%), revenue beat 13.3%, dividend raised to $1.65/share. BofA raised its target to $420 (from $408); Truist to $352 (from $344). Source: WebSearch aggregated finance/news pages.",
+    "SPY/QQQ": "S&P 500 (SPY) down -0.46%, Nasdaq 100 (QQQ) down -1.28% on 2026-07-17 (premarket had shown QQQ -1.86%, SPY -0.91%). Driven by a broad semiconductor selloff (Philadelphia Semiconductor Index down >13% over the trailing month, South Korea's Kospi -6% overnight on SK Hynix/Samsung weakness) compounding with the US military's sixth consecutive night of strikes on Iran. Netflix fell >8% premarket on soft guidance, adding to the risk-off tone. Retail sentiment on SPY moderated to 'neutral' from 'bullish'. Source: Motley Fool, Yahoo Finance, Stocktwits (via WebSearch).",
+    "XLE": "Sitting around $55, mid-range in its 52-week band, with a fresh geopolitical catalyst (renewed US-Iran conflict, collapsed peace talks) pointing toward further upside after a ~15% peace-deal-driven pullback from $63 to the low $50s earlier in July that has since partly recovered. Source: libertythroughwealth.com (via WebSearch)."
+  },
+  "existingPosition": {
+    "AAPL": {
+      "side": "long",
+      "shares": 2.15,
+      "avgPrice": 317.468655,
+      "openDate": "2026-07-14",
+      "originalStopLoss": 308,
+      "originalTakeProfit": 338,
+      "status": "Marked around $333.74 per web search (2026-07-17 close) — within ~1.5% of the original take-profit, RSI now overbought (71.86) with a notable bearish analyst outlier (KeyBanc Underweight, $250 target) emerging alongside the bulls. Neither stop nor target triggered; held unchanged per the original plan, flagged for close monitoring."
+    }
+  },
+  "decisionProcess": "Applied the system prompt v2's 7-role deliberation using the qualitative web-search findings above. 2026-07-17 was dominated by a broad semiconductor-sector rout (Philly Semi Index, Kospi, NVDA, META, AVGO all down) compounding a sixth consecutive night of US strikes on Iran — a systemic risk environment that blocks new position-taking regardless of individual setups. AAPL and MSFT diverged positively, but AAPL itself now shows an overbought RSI (71.86) and a sharp analyst-rating split (KeyBanc Underweight $250 vs Citi/Evercore $365) that argues for close monitoring rather than complacency, even though it sits close to its original take-profit. Every new-position candidate was vetoed at the Risk Manager step; the existing AAPL long continues unchanged since neither its stop nor its take-profit has triggered. Per user request, the reasoning field written into data/decisions.json for this and all prior decisions was translated into/written directly in Traditional Chinese to make the dashboard easier to read; this log's research notes remain in English for internal consistency.",
+  "entries": [
+    {
+      "id": "manual-2026-07-18",
+      "seq": 6,
+      "date": "2026-07-18",
+      "action": "HOLD",
+      "ticker": "",
+      "entryPrice": "",
+      "positionSize": "",
+      "leverage": 1,
+      "stopLoss": "",
+      "takeProfit": "",
+      "confidence": 20,
+      "riskLevel": "Low",
+      "_dataAsOf": "2026-07-17 (web search fallback — structured pipeline unreachable this session, see dataSourceNote)"
+    }
+  ]
+}

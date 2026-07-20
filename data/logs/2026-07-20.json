@@ -1,0 +1,39 @@
+{
+  "date": "2026-07-20",
+  "dataSourceNote": "The structured data pipeline (Yahoo Finance, Google News, SEC EDGAR) was unreachable again this session (policy-level 403s). More importantly, today is Monday 2026-07-20 and the US market had not yet opened at decision time, so the most recently completed trading session is still Friday 2026-07-17 — identical to the data already used for the 2026-07-18 decision. No new close/technical numbers exist to update; only weekend news context was gathered via web search.",
+  "webSearchFindings": {
+    "marketOverview": "US stock futures edged up premarket Monday: Dow futures +0.2%, S&P 500 futures +0.3%, Nasdaq-100 futures +0.7%. Oil eased after touching ~$90/barrel over the weekend as the US and Iran exchanged further attacks. Source: TheStreet, Yahoo Finance (via WebSearch).",
+    "iranConflict": "Over the weekend (2026-07-18/19), the US conducted a new round of airstrikes against Iran and confirmed the death of another American service member; Iran and the US exchanged tit-for-tat attacks. Geopolitical risk remains elevated and unresolved heading into the new week. Source: Yahoo Finance (via WebSearch).",
+    "semiconductors": "The iShares Semiconductor ETF (SOXX) is down more than 10% week-to-date, and the VanEck Semiconductor ETF (SMH) is down nearly 9%, reflecting continuation of the selloff seen Friday 2026-07-17. Source: WebSearch aggregated finance/news pages.",
+    "earningsWeek": "Wall Street has raised expectations for this week's earnings from Alphabet (GOOGL), Intel, IBM, and Tesla (TSLA), as investors look for evidence that AI capex is translating into monetization. AAPL's own earnings remain scheduled for 2026-07-30 (not this week)."
+  },
+  "existingPosition": {
+    "AAPL": {
+      "side": "long",
+      "shares": 2.15,
+      "avgPrice": 317.468655,
+      "openDate": "2026-07-14",
+      "originalStopLoss": 308,
+      "originalTakeProfit": 338,
+      "status": "No new close since the 2026-07-17 mark (~$333.74, per the 2026-07-18 decision's findings) — still between stop and target, held unchanged."
+    }
+  },
+  "decisionProcess": "No new trading session has completed since the 2026-07-17 close used for the prior (2026-07-18) decision, so this is functionally the 'market data unchanged since last run' case scripts/run-daily.mjs handles automatically. Rather than re-running a full analysis on identical numbers, this decision notes the unchanged technical picture and layers in weekend context: continued US-Iran escalation (a new US casualty, oil spiking to ~$90 before easing), a deepening week-to-date semiconductor selloff (SOXX -10%+, SMH -9%), and this week's earnings from GOOGL/Intel/IBM/TSLA (binary event risk). None of this supports a new position; the existing AAPL long continues unchanged since neither its stop nor take-profit has triggered.",
+  "entries": [
+    {
+      "id": "manual-2026-07-20",
+      "seq": 7,
+      "date": "2026-07-20",
+      "action": "HOLD",
+      "ticker": "",
+      "entryPrice": "",
+      "positionSize": "",
+      "leverage": 1,
+      "stopLoss": "",
+      "takeProfit": "",
+      "confidence": 15,
+      "riskLevel": "Low",
+      "_dataAsOf": "2026-07-17 (same as 2026-07-18 decision — no new session over the weekend, see dataSourceNote)"
+    }
+  ]
+}

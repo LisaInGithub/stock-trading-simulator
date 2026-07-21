@@ -1,0 +1,47 @@
+{
+  "date": "2026-07-21",
+  "dataSourceNote": "The structured data pipeline (Yahoo Finance, Google News, SEC EDGAR) was unreachable again this session (policy-level 403s). Web search was used for qualitative price/news context from Monday 2026-07-20's close instead. No new BUY/SELL/SHORT/COVER was sized off this data; the existing AAPL position was evaluated only against its own already-approved stop ($308) / take-profit ($338) plan, which has not been triggered.",
+  "webSearchFindings": {
+    "AAPL": "Closed $326.59 on 2026-07-20 (-2.14%, day range $326.11-$333.71), retreating from record highs as investors took profit ahead of the 2026-07-30 earnings report — consistent with the overbought RSI / bearish-analyst-split flag raised in the 2026-07-18 decision. BofA maintained Buy, expects Services +14% YoY. Source: fxleaders.com (via WebSearch).",
+    "MSFT": "Closed $402.29 on 2026-07-20 (+2.15%). FQ4 earnings due 2026-07-29. New $0.91 dividend declared (ex-date 2026-08-20). AMD CEO commented on an expanded Microsoft partnership. Source: WebSearch aggregated finance/news pages.",
+    "NVDA": "Closed $202.81 on 2026-07-20 (-2.21%), testing the $200 support level amid semiconductor-sector pressure and new concerns over Chinese AI competition (see News below). Denied a Kyber rack-scale delay report (schedule intact), which briefly boosted shares. Next catalysts: MSFT/GOOGL earnings 2026-07-29, AMZN early August, NVDA's own FQ2'27 earnings 2026-08-26. Source: fxleaders.com, tradingkey.com (via WebSearch).",
+    "AMZN": "Closed ~$249.99 on 2026-07-20 (+2.76%, figures somewhat inconsistent across sources). AWS delivered its fastest growth in 15 quarters in Q1 2026 (+28% YoY to $37.6B). Q2 earnings due 2026-07-30. Source: WebSearch aggregated finance/news pages.",
+    "GOOGL": "Closed $355.04 on 2026-07-20 (+2.38%), rebounding ahead of Q2 earnings due after market close 2026-07-22 (tomorrow) — consensus revenue ~$116.8B (+21%+ YoY), EPS $2.86, Cloud revenue ~$22.8B (+67%). Prior concern: $190B 2026 capex guidance has compressed FCF margin from 21% to 9.2%. Source: fxleaders.com, tradingkey.com (via WebSearch).",
+    "META": "Trading in the $636-653 range around 2026-07-20 (open $646.70), up 21% in July alone (+$270B market cap this month). Meta Compute cloud initiative and in-house Iris AI chip (production starting September) cited as drivers; 3.1% intraday pullback attributed to broader AI-spending-concern selling. Source: cryptonomist.ch, Motley Fool (via WebSearch).",
+    "TSLA": "Closed $370 on 2026-07-20 (down 6.8% week-over-week, -17% YTD). Q2 2026 earnings due after market close 2026-07-22 (tomorrow) — consensus EPS $0.50-0.54 on $25.7-25.8B revenue; market watching automotive margins, capex, and autonomy/FY26 guidance commentary. Source: 247wallst.com, Yahoo Finance (via WebSearch).",
+    "AVGO": "Trading $374.50-$383.59 on 2026-07-20 (~$382.18 quoted), caught in the broader semiconductor selloff. PHLX Semiconductor Index has entered a technical bear market (>20% off its June peak). Morgan Stanley reaffirmed Buy ('AVGO remains a core AI winner'); Standard Chartered partnership expansion (54 markets) also cited. Source: WebSearch aggregated finance/news pages.",
+    "JPM": "Trading ~$341.22 on 2026-07-20 (range $341.12-$341.87), stable since its 2026-07-14 earnings beat. 12-month analyst target $367.45 (Buy consensus, 23 analysts). Source: WebSearch aggregated finance/news pages.",
+    "SPY/QQQ": "QQQ closed $696.06 on 2026-07-20 (+0.1%, but day range included a $705.80 high before pulling back — a notable intraday reversal). SPY closed $742.09 (S&P 500 -0.3%). Source: ts2.tech, WebSearch aggregated finance pages.",
+    "XLE": "No fresh 2026-07-20/21 pricing found; most recent figure available was $57.49 as of 2026-07-17 (previous close $57.02). Source: WebSearch aggregated finance pages.",
+    "semiconductorBearMarket": "The PHLX Semiconductor Index has entered a technical bear market (>20% decline from its June peak), newly pressured by Chinese startup Moonshot AI's release of the Kimi K3 open-weight model (2.8T parameters, reportedly near-comparable performance to Anthropic's Fable 5 at much lower cost) — a fresh structural concern about Western AI-infrastructure valuations, not just short-term noise. NVDA is testing the psychologically important $200 support level as a result."
+  },
+  "existingPosition": {
+    "AAPL": {
+      "side": "long",
+      "shares": 2.15,
+      "avgPrice": 317.468655,
+      "openDate": "2026-07-14",
+      "originalStopLoss": 308,
+      "originalTakeProfit": 338,
+      "status": "Pulled back to $326.59 on 2026-07-20 (-2.14%) as flagged as a risk in the 2026-07-18 decision (overbought RSI, KeyBanc downgrade) — still well within the stop/target band, held unchanged."
+    }
+  },
+  "decisionProcess": "Applied the system prompt v2's 7-role deliberation using the qualitative web-search findings above. The semiconductor sector has moved from 'selloff' to a confirmed technical bear market (>20% off June peak), freshly pressured by a low-cost Chinese AI model (Moonshot's Kimi K3) that raises structural questions about Western AI-infra valuations rather than just short-term profit-taking. Separately, TSLA and GOOGL both report Q2 earnings tomorrow (2026-07-22) after market close — a textbook binary event risk a stop-loss can't protect against, ruling out any new position in either direction. Every new-position candidate was vetoed at the Risk Manager step. The existing AAPL long pulled back exactly as the prior decision's overbought/analyst-split flag anticipated, but remains comfortably within its stop/target band and continues unchanged.",
+  "entries": [
+    {
+      "id": "manual-2026-07-21",
+      "seq": 8,
+      "date": "2026-07-21",
+      "action": "HOLD",
+      "ticker": "",
+      "entryPrice": "",
+      "positionSize": "",
+      "leverage": 1,
+      "stopLoss": "",
+      "takeProfit": "",
+      "confidence": 20,
+      "riskLevel": "Low",
+      "_dataAsOf": "2026-07-20 (web search fallback — structured pipeline unreachable this session, see dataSourceNote)"
+    }
+  ]
+}

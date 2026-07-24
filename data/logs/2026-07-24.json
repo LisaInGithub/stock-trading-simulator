@@ -1,0 +1,42 @@
+{
+  "date": "2026-07-24",
+  "dataSourceNote": "The structured data pipeline was unreachable again this session. Web search was used for 2026-07-23 close data and news instead.",
+  "webSearchFindings": {
+    "GOOGL": "Fell a further -7.13% in the regular 2026-07-23 session to $317.69 (day range $314.90-$324.49), confirming the 2026-07-23 decision's thesis that the capex/FCF concern was an ongoing month-long decline, not a one-day AH panic that would recover. Now 20.6% below its 52-week high. Q2 capex surged to $45B, pushing free cash flow negative. Gemini 3.5 Pro launch delay continues to weigh. Source: ts2.tech (via WebSearch).",
+    "TSLA": "Crashed -14.52% to $319.69 on 2026-07-23 (volume 114.2M, ~231% of 3-month average), an 11-month low, -26.8% YTD. Cantor Fitzgerald cut its target to $485 (from $510, kept Overweight); Morgan Stanley cut to $400 (from $417, Equal-Weight) — notably the same day Morgan Stanley raised its AAPL target. Modest premarket rebound reported 2026-07-24. Source: Motley Fool, Benzinga, tradingkey.com (via WebSearch).",
+    "AAPL": "Closed around $321-322 on 2026-07-23 (-1.3% to -1.5%, sources vary slightly: $325.89->$321.66 one source, ~$320.99 another), cautious options-market sentiment ahead of 2026-07-30 earnings, but Morgan Stanley raised its AAPL target the same day it cut Tesla's — a relative-strength signal. 24/7 Wall St. target $361.72 (+11%). Still comfortably mid-band between its $308 stop and $338 take-profit. Source: gurufocus.com, 247wallst.com (via WebSearch).",
+    "NVDA": "Closed $208.76 on 2026-07-23 (-1.56%), down ~12% from its recent peak. Jensen Huang commented the US should embrace rather than ban Chinese AI models (relevant to the Kimi K3 competitive-threat narrative); Google recognized TPU-system sales revenue in Q2 2026, a notable signal of in-house chip competition to NVDA. Source: WebSearch aggregated finance/news pages.",
+    "MSFT": "Earnings due 2026-07-29 (consensus revenue $87.7B, EPS $4.24). 2026 capex guidance ~$190B is pressuring FCF concerns market-wide (same theme as GOOGL/META). Azure grew 40% YoY last quarter (vs AWS's 28%), but some investors question whether that lead is sustainable without even higher spending. Source: Motley Fool (via WebSearch).",
+    "AMZN": "Earnings due 2026-07-30; AWS Q2 revenue projected at $198.8B on continued AI demand. A Senate panel is reportedly scrutinizing Amazon over alleged Chinese influence, contributing to a ~2% after-hours drop. Source: WebSearch aggregated finance/news pages.",
+    "SPY/QQQ": "S&P 500 closed -1.21% on 2026-07-23 (its worst single-day performance since 2026-06-23), driven by the GOOGL/TSLA-triggered AI-spending anxiety plus a fresh geopolitical shock: Brent crude briefly topped $100/barrel after attacks on Saudi oil tankers in the Red Sea. Friday 2026-07-24 premarket showed a modest bounce attempt (SPY +0.24%, QQQ +0.14%; Polymarket implied 66% odds of a higher open). Source: Benzinga, ts2.tech (via WebSearch)."
+  },
+  "existingPosition": {
+    "AAPL": {
+      "side": "long",
+      "shares": 2.15,
+      "avgPrice": 317.468655,
+      "openDate": "2026-07-14",
+      "originalStopLoss": 308,
+      "originalTakeProfit": 338,
+      "status": "Held up relatively well through the 2026-07-23 selloff (~$321-322) — comfortably mid-band, held unchanged."
+    }
+  },
+  "decisionProcess": "GOOGL and TSLA, evaluated and passed on in the 2026-07-23 decision, both cratered the very next session (GOOGL -7.13%, TSLA -14.52%) on the same AI-capex/FCF concerns flagged at the time — validating that decision's caution rather than exposing it as excessive. Buying either now, one session after a violent single-day drop with no stabilization signal beyond a 'modest' Friday premarket bounce, would be catching a falling knife rather than a confirmed dip-buy — a different risk profile than waiting for a base to form. Combined with a fresh geopolitical escalation (Red Sea tanker attacks, Brent briefly above $100/barrel) and a dense cluster of mega-cap earnings over the coming week (MSFT 7/29, AMZN 7/30, AAPL 7/30), every new-position candidate was vetoed at the Risk Manager step. The existing AAPL position held up relatively well through the selloff and continues unchanged, still comfortably within its stop/target band.",
+  "entries": [
+    {
+      "id": "manual-2026-07-24",
+      "seq": 10,
+      "date": "2026-07-24",
+      "action": "HOLD",
+      "ticker": "",
+      "entryPrice": "",
+      "positionSize": "",
+      "leverage": 1,
+      "stopLoss": "",
+      "takeProfit": "",
+      "confidence": 20,
+      "riskLevel": "Low",
+      "_dataAsOf": "2026-07-23 (web search fallback — structured pipeline unreachable this session, see dataSourceNote)"
+    }
+  ]
+}

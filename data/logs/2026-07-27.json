@@ -1,0 +1,39 @@
+{
+  "date": "2026-07-27",
+  "dataSourceNote": "The structured data pipeline was unreachable again this session. More importantly, today is Monday 2026-07-27 and the US market had not yet opened at decision time, so the most recently completed trading session is still Friday 2026-07-24 — identical to the data already used for the 2026-07-25 decision. No new close/technical numbers exist to update; only weekend news context was gathered via web search.",
+  "webSearchFindings": {
+    "fedMeeting": "The Federal Reserve announces its interest-rate decision Wednesday 2026-07-29. Consensus expects no hike until September, but fed funds futures price in a 35% chance of a hike as soon as this meeting — genuine uncertainty. Source: CNBC (via WebSearch).",
+    "earningsWeek": "MSFT, META, and AAPL are all scheduled to report earnings around 2026-07-29/30, the same week as the Fed decision — an unusually dense cluster of binary catalysts. Markets are watching whether these three face the same capex-guidance punishment GOOGL received on 2026-07-22.",
+    "iranConflict": "Over the weekend, President Trump indicated he is considering a 'massive attack' on Iran, described as bigger than anything seen so far in the conflict, which has now extended to a new front in the Red Sea. Stocks posted a losing week Friday as investors increasingly suspect there is no off-ramp in the US-Iran war. Source: CNBC (via WebSearch).",
+    "oil": "Brent crude eased ~4% to settle at $96.78, WTI fell 3% to $89.31 — a partial retreat from the prior spike above $100/barrel, a mildly positive signal that the most acute panic has cooled slightly even as the underlying conflict has not resolved. Source: CNBC (via WebSearch)."
+  },
+  "existingPosition": {
+    "AAPL": {
+      "side": "long",
+      "shares": 2.15,
+      "avgPrice": 317.468655,
+      "openDate": "2026-07-14",
+      "originalStopLoss": 308,
+      "originalTakeProfit": 338,
+      "status": "No new close since the 2026-07-24 mark ($333.02, per the 2026-07-25 decision's findings) — still between stop and target, held unchanged."
+    }
+  },
+  "decisionProcess": "No new trading session has completed since the 2026-07-24 close used for the prior (2026-07-25) decision, mirroring scripts/run-daily.mjs's own 'market data unchanged since last run' handling. Rather than re-running a full analysis on identical numbers, this decision layers in weekend context: an escalating Iran conflict (Trump reportedly considering a larger-scale attack, a new Red Sea front) despite a modest oil pullback, and — most significantly — a single week containing both the Fed's rate decision (2026-07-29) and earnings from MSFT, META, and AAPL (~2026-07-29/30), an unusually concentrated cluster of binary event risk. None of this supports a new position; the existing AAPL long continues unchanged since neither its stop nor take-profit has triggered.",
+  "entries": [
+    {
+      "id": "manual-2026-07-27",
+      "seq": 12,
+      "date": "2026-07-27",
+      "action": "HOLD",
+      "ticker": "",
+      "entryPrice": "",
+      "positionSize": "",
+      "leverage": 1,
+      "stopLoss": "",
+      "takeProfit": "",
+      "confidence": 15,
+      "riskLevel": "Low",
+      "_dataAsOf": "2026-07-24 (same as 2026-07-25 decision — no new session over the weekend, see dataSourceNote)"
+    }
+  ]
+}

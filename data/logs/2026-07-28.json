@@ -1,0 +1,42 @@
+{
+  "date": "2026-07-28",
+  "dataSourceNote": "The structured data pipeline was unreachable again this session. Web search was used for 2026-07-27 (Monday) close data and news instead.",
+  "webSearchFindings": {
+    "AAPL": "Rose 1.17-1.2% on 2026-07-27 to an intraday all-time high of $337.12 (closing basis reported as $336.91) — now within ~1% of the position's $338 take-profit. Rebounded 20% since late June on iPhone 17/Services optimism. Q3 earnings due 2026-07-30 (consensus revenue ~$108.8B, EPS +~20% YoY). GF Value flags 25.1% overvaluation. Source: gurufocus.com, investing.com (via WebSearch).",
+    "GOOGL": "Rebounded +2.13% to $326.56 on 2026-07-27 (day range $324.46-$330.42) — a second day of stabilization after the post-earnings slide. Down -7.36% over the trailing 2 weeks. Trading at 27x earnings (lowest in a year); analysts flag $315 as critical support (currently above it). Roth Capital rated Buy/Hold on 2026-07-23. Source: stockinvest.us, tradingkey.com (via WebSearch).",
+    "TSLA": "Extremely volatile session on 2026-07-27 (range $306.51-$325.00, closed $311.40, volume 62.76M vs 42.41M average). Down -17.81% for the week ending 2026-07-24, its worst week since 2022. Technical charts point toward $296 next; $299 flagged by one analyst as the 'line in the sand' ahead of the Fed decision. Operating income fell -56.88% to $398M, FCF swung to -$1.09B, opex +47% (post-earnings detail). Cybertruck called 'the biggest flop in automotive history' by Bloomberg/24-7 Wall St. No stabilization confirmed — still deteriorating on both technicals and fundamentals. Source: 247wallst.com, Yahoo Finance, tradingkey.com (via WebSearch).",
+    "MSFT": "Rose +3.09% on 2026-07-27 ahead of Wednesday's (2026-07-29) earnings, but is down -9.88% since April 29 — entering earnings 'bruised'. Analysts flag risk that Azure growth may miss the top end of its 30-31% guidance due to hardware/power capacity constraints. Source: tradingkey.com, 247wallst.com (via WebSearch).",
+    "META": "Trading near record highs ahead of its 2026-07-29 earnings, supported by strong ad metrics (+19% impressions, +12% pricing), but down -10.97% since April 29. Has beaten estimates 4 consecutive quarters (avg +12.1% EPS surprise). Full-year 2026 capex guidance $125-145B remains the key swing factor for margins. Source: 247wallst.com, Benzinga (via WebSearch).",
+    "AVGO": "Relatively stable at $391.98 (range $378.75-$392.25). Signed a $200B AI chip pact with Samsung through 2030 — a positive long-term catalyst, though no clear near-term entry signal. Source: WebSearch aggregated finance/news pages.",
+    "SPY/QQQ": "QQQ fell -0.31% on 2026-07-27 to $682.12, its 4th consecutive down day. Continued pressure from Strait of Hormuz shipping disruption and Brent crude up 26% since hostilities resumed 2026-07-07. Source: TipRanks, stockinvest.us (via WebSearch)."
+  },
+  "existingPosition": {
+    "AAPL": {
+      "side": "long",
+      "shares": 2.15,
+      "avgPrice": 317.468655,
+      "openDate": "2026-07-14",
+      "originalStopLoss": 308,
+      "originalTakeProfit": 338,
+      "status": "Hit a fresh all-time intraday high of $337.12 on 2026-07-27 — within ~1% of the $338 take-profit but not yet triggered. Held unchanged, flagged for very close monitoring given tomorrow's Fed decision and dense earnings calendar."
+    }
+  },
+  "decisionProcess": "Tomorrow (2026-07-29) is simultaneously the Fed's rate decision and MSFT/META earnings day — the single most concentrated binary-event day of the quarter. Initiating any new position today, the day before, was judged imprudent regardless of individual setup quality. TSLA continues to deteriorate on both technicals (targets pointing to $296) and fundamentals (operating income -56.88%, negative FCF, Cybertruck failure narrative) with no stabilization. GOOGL has now had a second day of recovery and is holding above its $315 support level, a mildly encouraging but still-early signal. The existing AAPL long is extremely close to its take-profit ($337.12 vs $338 target) but neither exit condition has formally triggered, so it continues unchanged per the original plan, flagged for close monitoring.",
+  "entries": [
+    {
+      "id": "manual-2026-07-28",
+      "seq": 13,
+      "date": "2026-07-28",
+      "action": "HOLD",
+      "ticker": "",
+      "entryPrice": "",
+      "positionSize": "",
+      "leverage": 1,
+      "stopLoss": "",
+      "takeProfit": "",
+      "confidence": 20,
+      "riskLevel": "Low",
+      "_dataAsOf": "2026-07-27 (web search fallback — structured pipeline unreachable this session, see dataSourceNote)"
+    }
+  ]
+}
